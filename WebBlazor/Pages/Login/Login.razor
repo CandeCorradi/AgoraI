@@ -1,0 +1,93 @@
+﻿@page "/Login"
+@inject FirebaseAuthService firebaseAuthService
+@inject IJSRuntime js 
+@inject SweetAlertService sweetAlert
+@inject NavigationManager navigationManager
+
+@if (!isAuthenticated) //
+{
+<div class="card text-center">
+    <div class="card-header">
+        Iniciar sesión
+    </div>
+    <div class="card-body">
+        <h3 class="card-title">Bienvenido a Ágora</h3>
+        <div class="container">
+            <div class="row mb-3">
+                <div class="col-md-12 d-flex justify-content-center align-items-center">
+                    <label class="form-label me-2">Email</label>
+                    <InputText class="form-control w-50" @bind-Value="email" placeholder="Email" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12 d-flex justify-content-center align-items-center">
+                    <label class="form-label me-2">Contraseña</label>
+                    <InputText class="form-control w-50" @bind-Value="password" placeholder="Contraseña" type="password" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-center">
+                    <button class="btn btn-primary" @onclick="Loguear">Acceder</button>
+                </div>
+                <div class="col-md-12 d-flex justify-content-center">
+                    <button class="btn btn-secondary" @onclick="RegisterMe">Registrarme</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-body-secondary">
+        Desarrollo 2do año - TSDS - 2025
+    </div>
+</div>
+}
+else
+{
+<div class="card text-center">
+    <div class="card-header">
+        Cerrar sesión
+    </div>
+    <div class="card-body">
+        <p class="card-header">Cerrar sesión de Ágora</p>
+
+        <button class="btn btn-primary" @onclick="Desloguear">Cerrar sesión</button>
+    </div>
+    <div class="card-footer text-body-secondary">
+        Desarrollo Base de datos I - TSDS - 2024
+    </div>
+</div>
+}
+@code 
+{
+    bool isAuthenticated = false;
+    string email = string.Empty;
+    string password = string.Empty;
+
+    private async Task Loguear()
+    {
+        // Aquí iría la lógica de autenticación real
+        var user = await firebaseAuthService.SignInWithEmailPassword(email, password);
+        if (user != null)
+        {
+            isAuthenticated = true; // Simula que el usuario se ha autenticado correctamente
+            StateHasChanged(); //metodo que se llama en la pagina para que se reevalue y se redibuje, el estado tiene un cambio
+        }
+        else
+        {
+            await sweetAlert.FireAsync("alert", "Error de autenticación. Por favor, verifica tus credenciales.", SweetAlertIcon.Error);
+        }
+        
+    }
+private async Task Desloguear()
+    {
+        isAuthenticated = false;
+        email = string.Empty;
+        password = string.Empty;
+        await firebaseAuthService.SignOut();
+        StateHasChanged(); //metodo que se llama en la pagina para que se reevalue y se redibuje, el estado tiene un cambio
+    }
+    private async Task RegisterMe()
+    {
+        navigationManager.NavigateTo("/signin");
+    }
+}
+
