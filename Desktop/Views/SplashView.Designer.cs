@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SplashView));
             pictureBox1 = new PictureBox();
             ProgressBar = new ProgressBar();
             Timer = new System.Windows.Forms.Timer(components);
@@ -37,19 +38,21 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.Image = Properties.Resources.Generated_Image_September_02__2025___4_57PM_removebg_preview;
-            pictureBox1.Location = new Point(153, -36);
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(117, 11);
+            pictureBox1.Margin = new Padding(2, 2, 2, 2);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(427, 356);
+            pictureBox1.Size = new Size(255, 161);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
             // ProgressBar
             // 
-            ProgressBar.Location = new Point(23, 293);
+            ProgressBar.Location = new Point(16, 176);
+            ProgressBar.Margin = new Padding(2, 2, 2, 2);
             ProgressBar.Name = "ProgressBar";
-            ProgressBar.Size = new Size(670, 34);
+            ProgressBar.Size = new Size(469, 20);
             ProgressBar.TabIndex = 1;
             // 
             // Timer
@@ -59,13 +62,15 @@
             // 
             // SplashView
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(23, 39, 55);
-            ClientSize = new Size(717, 339);
+            BackColor = Color.White;
+            ClientSize = new Size(502, 203);
             Controls.Add(ProgressBar);
             Controls.Add(pictureBox1);
+            ForeColor = SystemColors.ControlText;
             FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(2, 2, 2, 2);
             Name = "SplashView";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "SplashView";
