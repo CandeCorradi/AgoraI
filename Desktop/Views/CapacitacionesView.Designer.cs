@@ -32,6 +32,8 @@ namespace Desktop.Views
             components = new System.ComponentModel.Container();
             TabControl = new TabControl();
             TabPageLista = new TabPage();
+            btnRestaurar = new Button();
+            checkVerEliminados = new CheckBox();
             BtnBuscar = new FontAwesome.Sharp.IconButton();
             TxtBuscar = new TextBox();
             label2 = new Label();
@@ -41,15 +43,16 @@ namespace Desktop.Views
             BtnAgregar = new FontAwesome.Sharp.IconButton();
             BtnModificar = new FontAwesome.Sharp.IconButton();
             TabPageAgregarEditar = new TabPage();
-            label7 = new Label();
-            ComboPaises = new ComboBox();
+            checkInscripcionAbierta = new CheckBox();
+            label8 = new Label();
+            TxtPonente = new TextBox();
+            numericCupo = new NumericUpDown();
+            dateTimeFechaHora = new DateTimePicker();
             label6 = new Label();
-            NumericCalificacion = new NumericUpDown();
             label5 = new Label();
-            NumericDuracion = new NumericUpDown();
-            TxtPortada = new TextBox();
+            TxtDetalle = new TextBox();
             label4 = new Label();
-            TxtTitulo = new TextBox();
+            TxtNombre = new TextBox();
             label3 = new Label();
             BtnCancelar = new FontAwesome.Sharp.IconButton();
             BtnGuardar = new FontAwesome.Sharp.IconButton();
@@ -62,8 +65,7 @@ namespace Desktop.Views
             TabPageLista.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)GridCapacitaciones).BeginInit();
             TabPageAgregarEditar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)NumericCalificacion).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)NumericDuracion).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericCupo).BeginInit();
             panel1.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -77,11 +79,13 @@ namespace Desktop.Views
             TabControl.Margin = new Padding(2);
             TabControl.Name = "TabControl";
             TabControl.SelectedIndex = 0;
-            TabControl.Size = new Size(844, 293);
+            TabControl.Size = new Size(844, 298);
             TabControl.TabIndex = 6;
             // 
             // TabPageLista
             // 
+            TabPageLista.Controls.Add(btnRestaurar);
+            TabPageLista.Controls.Add(checkVerEliminados);
             TabPageLista.Controls.Add(BtnBuscar);
             TabPageLista.Controls.Add(TxtBuscar);
             TabPageLista.Controls.Add(label2);
@@ -94,10 +98,32 @@ namespace Desktop.Views
             TabPageLista.Margin = new Padding(2);
             TabPageLista.Name = "TabPageLista";
             TabPageLista.Padding = new Padding(2);
-            TabPageLista.Size = new Size(836, 265);
+            TabPageLista.Size = new Size(836, 270);
             TabPageLista.TabIndex = 1;
             TabPageLista.Text = "Lista";
             TabPageLista.UseVisualStyleBackColor = true;
+            // 
+            // btnRestaurar
+            // 
+            btnRestaurar.Location = new Point(707, 172);
+            btnRestaurar.Name = "btnRestaurar";
+            btnRestaurar.Size = new Size(95, 28);
+            btnRestaurar.TabIndex = 6;
+            btnRestaurar.Text = "Restaurar";
+            btnRestaurar.UseVisualStyleBackColor = true;
+            btnRestaurar.Visible = false;
+            btnRestaurar.Click += btnRestaurar_Click;
+            // 
+            // checkVerEliminados
+            // 
+            checkVerEliminados.AutoSize = true;
+            checkVerEliminados.Location = new Point(508, 15);
+            checkVerEliminados.Name = "checkVerEliminados";
+            checkVerEliminados.Size = new Size(103, 19);
+            checkVerEliminados.TabIndex = 1;
+            checkVerEliminados.Text = "Ver Eliminados";
+            checkVerEliminados.UseVisualStyleBackColor = true;
+            checkVerEliminados.CheckedChanged += checkVerEliminados_CheckedChanged;
             // 
             // BtnBuscar
             // 
@@ -108,7 +134,7 @@ namespace Desktop.Views
             BtnBuscar.Margin = new Padding(2);
             BtnBuscar.Name = "BtnBuscar";
             BtnBuscar.Size = new Size(101, 32);
-            BtnBuscar.TabIndex = 0;
+            BtnBuscar.TabIndex = 2;
             BtnBuscar.Text = "Buscar";
             // 
             // TxtBuscar
@@ -116,8 +142,8 @@ namespace Desktop.Views
             TxtBuscar.Location = new Point(56, 13);
             TxtBuscar.Margin = new Padding(2);
             TxtBuscar.Name = "TxtBuscar";
-            TxtBuscar.Size = new Size(551, 23);
-            TxtBuscar.TabIndex = 1;
+            TxtBuscar.Size = new Size(428, 23);
+            TxtBuscar.TabIndex = 0;
             // 
             // label2
             // 
@@ -134,11 +160,11 @@ namespace Desktop.Views
             BtnSalir.IconChar = FontAwesome.Sharp.IconChar.None;
             BtnSalir.IconColor = Color.Black;
             BtnSalir.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            BtnSalir.Location = new Point(701, 216);
+            BtnSalir.Location = new Point(701, 228);
             BtnSalir.Margin = new Padding(2);
             BtnSalir.Name = "BtnSalir";
             BtnSalir.Size = new Size(117, 33);
-            BtnSalir.TabIndex = 14;
+            BtnSalir.TabIndex = 7;
             BtnSalir.Text = "Salir";
             // 
             // GridCapacitaciones
@@ -148,39 +174,39 @@ namespace Desktop.Views
             GridCapacitaciones.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             GridCapacitaciones.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             GridCapacitaciones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            GridCapacitaciones.Location = new Point(4, 37);
+            GridCapacitaciones.Location = new Point(12, 43);
             GridCapacitaciones.Margin = new Padding(2);
             GridCapacitaciones.MultiSelect = false;
             GridCapacitaciones.Name = "GridCapacitaciones";
             GridCapacitaciones.ReadOnly = true;
             GridCapacitaciones.RowHeadersWidth = 62;
             GridCapacitaciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            GridCapacitaciones.Size = new Size(602, 230);
+            GridCapacitaciones.Size = new Size(674, 218);
             GridCapacitaciones.TabIndex = 7;
-            GridCapacitaciones.SelectionChanged += subMenuCapacitaciones;
             // 
             // BtnEliminar
             // 
             BtnEliminar.IconChar = FontAwesome.Sharp.IconChar.None;
             BtnEliminar.IconColor = Color.Black;
             BtnEliminar.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            BtnEliminar.Location = new Point(707, 158);
+            BtnEliminar.Location = new Point(707, 135);
             BtnEliminar.Margin = new Padding(2);
             BtnEliminar.Name = "BtnEliminar";
             BtnEliminar.Size = new Size(95, 32);
-            BtnEliminar.TabIndex = 15;
+            BtnEliminar.TabIndex = 5;
             BtnEliminar.Text = "Eliminar";
+            BtnEliminar.Click += BtnEliminar_Click;
             // 
             // BtnAgregar
             // 
             BtnAgregar.IconChar = FontAwesome.Sharp.IconChar.None;
             BtnAgregar.IconColor = Color.Black;
             BtnAgregar.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            BtnAgregar.Location = new Point(707, 70);
+            BtnAgregar.Location = new Point(707, 66);
             BtnAgregar.Margin = new Padding(2);
             BtnAgregar.Name = "BtnAgregar";
-            BtnAgregar.Size = new Size(95, 38);
-            BtnAgregar.TabIndex = 16;
+            BtnAgregar.Size = new Size(95, 31);
+            BtnAgregar.TabIndex = 3;
             BtnAgregar.Text = "Agregar";
             // 
             // BtnModificar
@@ -190,11 +216,11 @@ namespace Desktop.Views
             BtnModificar.IconColor = Color.Black;
             BtnModificar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtnModificar.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnModificar.Location = new Point(707, 112);
+            BtnModificar.Location = new Point(707, 101);
             BtnModificar.Margin = new Padding(2);
             BtnModificar.Name = "BtnModificar";
             BtnModificar.Size = new Size(95, 30);
-            BtnModificar.TabIndex = 9;
+            BtnModificar.TabIndex = 4;
             BtnModificar.Text = "&Modificar";
             BtnModificar.TextAlign = ContentAlignment.MiddleRight;
             BtnModificar.UseVisualStyleBackColor = true;
@@ -202,15 +228,16 @@ namespace Desktop.Views
             // 
             // TabPageAgregarEditar
             // 
-            TabPageAgregarEditar.Controls.Add(label7);
-            TabPageAgregarEditar.Controls.Add(ComboPaises);
+            TabPageAgregarEditar.Controls.Add(checkInscripcionAbierta);
+            TabPageAgregarEditar.Controls.Add(label8);
+            TabPageAgregarEditar.Controls.Add(TxtPonente);
+            TabPageAgregarEditar.Controls.Add(numericCupo);
+            TabPageAgregarEditar.Controls.Add(dateTimeFechaHora);
             TabPageAgregarEditar.Controls.Add(label6);
-            TabPageAgregarEditar.Controls.Add(NumericCalificacion);
             TabPageAgregarEditar.Controls.Add(label5);
-            TabPageAgregarEditar.Controls.Add(NumericDuracion);
-            TabPageAgregarEditar.Controls.Add(TxtPortada);
+            TabPageAgregarEditar.Controls.Add(TxtDetalle);
             TabPageAgregarEditar.Controls.Add(label4);
-            TabPageAgregarEditar.Controls.Add(TxtTitulo);
+            TabPageAgregarEditar.Controls.Add(TxtNombre);
             TabPageAgregarEditar.Controls.Add(label3);
             TabPageAgregarEditar.Controls.Add(BtnCancelar);
             TabPageAgregarEditar.Controls.Add(BtnGuardar);
@@ -218,104 +245,112 @@ namespace Desktop.Views
             TabPageAgregarEditar.Margin = new Padding(2);
             TabPageAgregarEditar.Name = "TabPageAgregarEditar";
             TabPageAgregarEditar.Padding = new Padding(2);
-            TabPageAgregarEditar.Size = new Size(836, 265);
+            TabPageAgregarEditar.Size = new Size(836, 270);
             TabPageAgregarEditar.TabIndex = 0;
             TabPageAgregarEditar.Text = "Agregar/Editar";
             TabPageAgregarEditar.UseVisualStyleBackColor = true;
             // 
-            // label7
+            // checkInscripcionAbierta
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(555, 130);
-            label7.Margin = new Padding(2, 0, 2, 0);
-            label7.Name = "label7";
-            label7.Size = new Size(31, 15);
-            label7.TabIndex = 23;
-            label7.Text = "País:";
+            checkInscripcionAbierta.AutoSize = true;
+            checkInscripcionAbierta.Location = new Point(395, 154);
+            checkInscripcionAbierta.Name = "checkInscripcionAbierta";
+            checkInscripcionAbierta.Size = new Size(123, 19);
+            checkInscripcionAbierta.TabIndex = 5;
+            checkInscripcionAbierta.Text = "Inscripción abierta";
+            checkInscripcionAbierta.UseVisualStyleBackColor = true;
             // 
-            // ComboPaises
+            // label8
             // 
-            ComboPaises.FormattingEnabled = true;
-            ComboPaises.Location = new Point(592, 128);
-            ComboPaises.Margin = new Padding(2);
-            ComboPaises.Name = "ComboPaises";
-            ComboPaises.Size = new Size(190, 23);
-            ComboPaises.TabIndex = 22;
+            label8.AutoSize = true;
+            label8.Location = new Point(64, 158);
+            label8.Margin = new Padding(2, 0, 2, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(79, 15);
+            label8.TabIndex = 27;
+            label8.Text = "Fecha y Hora:";
+            // 
+            // TxtPonente
+            // 
+            TxtPonente.Location = new Point(153, 113);
+            TxtPonente.Margin = new Padding(2);
+            TxtPonente.Name = "TxtPonente";
+            TxtPonente.Size = new Size(628, 23);
+            TxtPonente.TabIndex = 2;
+            // 
+            // numericCupo
+            // 
+            numericCupo.Location = new Point(153, 188);
+            numericCupo.Name = "numericCupo";
+            numericCupo.Size = new Size(78, 23);
+            numericCupo.TabIndex = 4;
+            numericCupo.TextAlign = HorizontalAlignment.Right;
+            // 
+            // dateTimeFechaHora
+            // 
+            dateTimeFechaHora.CustomFormat = "dd/MM/yyyy HH:mm";
+            dateTimeFechaHora.Format = DateTimePickerFormat.Custom;
+            dateTimeFechaHora.Location = new Point(153, 152);
+            dateTimeFechaHora.Name = "dateTimeFechaHora";
+            dateTimeFechaHora.Size = new Size(149, 23);
+            dateTimeFechaHora.TabIndex = 3;
+            dateTimeFechaHora.Value = new DateTime(2025, 9, 17, 20, 0, 22, 0);
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(74, 172);
+            label6.Location = new Point(104, 190);
             label6.Margin = new Padding(2, 0, 2, 0);
             label6.Name = "label6";
-            label6.Size = new Size(72, 15);
+            label6.Size = new Size(39, 15);
             label6.TabIndex = 21;
-            label6.Text = "Calificación:";
-            // 
-            // NumericCalificacion
-            // 
-            NumericCalificacion.DecimalPlaces = 2;
-            NumericCalificacion.Location = new Point(153, 172);
-            NumericCalificacion.Margin = new Padding(2);
-            NumericCalificacion.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
-            NumericCalificacion.Name = "NumericCalificacion";
-            NumericCalificacion.Size = new Size(126, 23);
-            NumericCalificacion.TabIndex = 20;
+            label6.Text = "Cupo:";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(22, 128);
+            label5.Location = new Point(85, 116);
             label5.Margin = new Padding(2, 0, 2, 0);
             label5.Name = "label5";
-            label5.Size = new Size(121, 15);
+            label5.Size = new Size(58, 15);
             label5.TabIndex = 19;
-            label5.Text = "Duración en minutos:";
+            label5.Text = "Orador/a:";
             // 
-            // NumericDuracion
+            // TxtDetalle
             // 
-            NumericDuracion.Location = new Point(153, 128);
-            NumericDuracion.Margin = new Padding(2);
-            NumericDuracion.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
-            NumericDuracion.Name = "NumericDuracion";
-            NumericDuracion.Size = new Size(126, 23);
-            NumericDuracion.TabIndex = 18;
-            // 
-            // TxtPortada
-            // 
-            TxtPortada.Location = new Point(153, 80);
-            TxtPortada.Margin = new Padding(2);
-            TxtPortada.Name = "TxtPortada";
-            TxtPortada.Size = new Size(628, 23);
-            TxtPortada.TabIndex = 17;
+            TxtDetalle.Location = new Point(153, 75);
+            TxtDetalle.Margin = new Padding(2);
+            TxtDetalle.Name = "TxtDetalle";
+            TxtDetalle.Size = new Size(628, 23);
+            TxtDetalle.TabIndex = 1;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(93, 82);
+            label4.Location = new Point(97, 78);
             label4.Margin = new Padding(2, 0, 2, 0);
             label4.Name = "label4";
-            label4.Size = new Size(51, 15);
+            label4.Size = new Size(46, 15);
             label4.TabIndex = 16;
-            label4.Text = "Portada:";
+            label4.Text = "Detalle:";
             // 
-            // TxtTitulo
+            // TxtNombre
             // 
-            TxtTitulo.Location = new Point(153, 37);
-            TxtTitulo.Margin = new Padding(2);
-            TxtTitulo.Name = "TxtTitulo";
-            TxtTitulo.Size = new Size(628, 23);
-            TxtTitulo.TabIndex = 15;
+            TxtNombre.Location = new Point(153, 37);
+            TxtNombre.Margin = new Padding(2);
+            TxtNombre.Name = "TxtNombre";
+            TxtNombre.Size = new Size(628, 23);
+            TxtNombre.TabIndex = 0;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(105, 40);
+            label3.Location = new Point(89, 40);
             label3.Margin = new Padding(2, 0, 2, 0);
             label3.Name = "label3";
-            label3.Size = new Size(40, 15);
+            label3.Size = new Size(54, 15);
             label3.TabIndex = 11;
-            label3.Text = "Título:";
+            label3.Text = "Nombre:";
             // 
             // BtnCancelar
             // 
@@ -324,11 +359,11 @@ namespace Desktop.Views
             BtnCancelar.IconColor = Color.Black;
             BtnCancelar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtnCancelar.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnCancelar.Location = new Point(437, 226);
+            BtnCancelar.Location = new Point(543, 190);
             BtnCancelar.Margin = new Padding(2);
             BtnCancelar.Name = "BtnCancelar";
-            BtnCancelar.Size = new Size(95, 32);
-            BtnCancelar.TabIndex = 10;
+            BtnCancelar.Size = new Size(111, 48);
+            BtnCancelar.TabIndex = 7;
             BtnCancelar.Text = "&Cancelar";
             BtnCancelar.TextAlign = ContentAlignment.MiddleRight;
             BtnCancelar.UseVisualStyleBackColor = true;
@@ -341,11 +376,11 @@ namespace Desktop.Views
             BtnGuardar.IconColor = Color.Black;
             BtnGuardar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnGuardar.Location = new Point(297, 226);
+            BtnGuardar.Location = new Point(395, 190);
             BtnGuardar.Margin = new Padding(2);
             BtnGuardar.Name = "BtnGuardar";
-            BtnGuardar.Size = new Size(95, 32);
-            BtnGuardar.TabIndex = 9;
+            BtnGuardar.Size = new Size(119, 48);
+            BtnGuardar.TabIndex = 6;
             BtnGuardar.Text = "&Guardar";
             BtnGuardar.TextAlign = ContentAlignment.MiddleRight;
             BtnGuardar.UseVisualStyleBackColor = true;
@@ -366,7 +401,7 @@ namespace Desktop.Views
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(17, 7);
+            label1.Location = new Point(17, 10);
             label1.Name = "label1";
             label1.Size = new Size(215, 31);
             label1.TabIndex = 1;
@@ -376,7 +411,7 @@ namespace Desktop.Views
             // 
             statusStrip1.ImageScalingSize = new Size(24, 24);
             statusStrip1.Items.AddRange(new ToolStripItem[] { LabelStatusMessage });
-            statusStrip1.Location = new Point(0, 354);
+            statusStrip1.Location = new Point(0, 369);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new Padding(1, 0, 10, 0);
             statusStrip1.Size = new Size(867, 22);
@@ -397,7 +432,7 @@ namespace Desktop.Views
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(867, 376);
+            ClientSize = new Size(867, 391);
             Controls.Add(statusStrip1);
             Controls.Add(panel1);
             Controls.Add(TabControl);
@@ -409,8 +444,7 @@ namespace Desktop.Views
             ((System.ComponentModel.ISupportInitialize)GridCapacitaciones).EndInit();
             TabPageAgregarEditar.ResumeLayout(false);
             TabPageAgregarEditar.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)NumericCalificacion).EndInit();
-            ((System.ComponentModel.ISupportInitialize)NumericDuracion).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericCupo).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             statusStrip1.ResumeLayout(false);
@@ -419,10 +453,7 @@ namespace Desktop.Views
             PerformLayout();
         }
 
-        private void subMenuCapacitaciones(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+
 
         #endregion
         private TabControl TabControl;
@@ -440,18 +471,21 @@ namespace Desktop.Views
         private TextBox TxtBuscar;
         private FontAwesome.Sharp.IconButton BtnCancelar;
         private FontAwesome.Sharp.IconButton BtnGuardar;
-        private TextBox TxtPortada;
+        private TextBox TxtDetalle;
         private Label label4;
-        private TextBox TxtTitulo;
+        private TextBox TxtNombre;
         private Label label3;
         private Label label5;
-        private NumericUpDown NumericDuracion;
         private Label label6;
-        private NumericUpDown NumericCalificacion;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel LabelStatusMessage;
         private System.Windows.Forms.Timer TimerStatusBar;
-        private Label label7;
-        private ComboBox ComboPaises;
+        private Button btnRestaurar;
+        private CheckBox checkVerEliminados;
+        private TextBox TxtPonente;
+        private NumericUpDown numericCupo;
+        private DateTimePicker dateTimeFechaHora;
+        private CheckBox checkInscripcionAbierta;
+        private Label label8;
     }
 }
