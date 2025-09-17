@@ -136,6 +136,7 @@ namespace Desktop.Views
             BtnBuscar.Size = new Size(101, 32);
             BtnBuscar.TabIndex = 2;
             BtnBuscar.Text = "Buscar";
+            BtnBuscar.Click += BtnBuscar_Click_1;
             // 
             // TxtBuscar
             // 

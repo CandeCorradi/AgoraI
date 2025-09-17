@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Threading.Tasks;
 using Service.Models;
 using Service.Services;
 
@@ -19,7 +20,7 @@ namespace Desktop.Views
 
         private void DisplayHideControlsRestoreButton(object? sender, EventArgs e)
         {
-            btnRestaurar.Visible=checkVerEliminados.Checked;
+            btnRestaurar.Visible = checkVerEliminados.Checked;
             TxtBuscar.Enabled = !checkVerEliminados.Checked;
             BtnBuscar.Enabled = !checkVerEliminados.Checked;
             BtnAgregar.Enabled = !checkVerEliminados.Checked;
@@ -64,7 +65,7 @@ namespace Desktop.Views
         private void BtnAgregar_Click(object sender, EventArgs e)
         {
             LimpiarControlesAgregarEditar();
-            TabControl.SelectedTab=TabPageAgregarEditar;
+            TabControl.SelectedTab = TabPageAgregarEditar;
         }
 
         private void LimpiarControlesAgregarEditar()
@@ -79,7 +80,7 @@ namespace Desktop.Views
 
         private void BtnCancelar_Click(object sender, EventArgs e)
         {
-            TabControl.SelectedTab=TabPageLista;
+            TabControl.SelectedTab = TabPageLista;
 
         }
 
@@ -114,7 +115,7 @@ namespace Desktop.Views
                 TimerStatusBar.Start(); // Iniciar el temporizador para mostrar el mensaje en la barra de estado
                 await GetAllData();
                 LimpiarControlesAgregarEditar();
-                TabControl.SelectedTab=TabPageLista;
+                TabControl.SelectedTab = TabPageLista;
             }
             else
             {
@@ -134,9 +135,9 @@ namespace Desktop.Views
                 dateTimeFechaHora.Value = _currentCapacitacion.FechaHora;
                 numericCupo.Value = _currentCapacitacion.Cupo;
                 checkInscripcionAbierta.Checked = _currentCapacitacion.InscripcionAbierta;
-                
 
-                TabControl.SelectedTab=TabPageAgregarEditar;
+
+                TabControl.SelectedTab = TabPageAgregarEditar;
             }
             else
             {
@@ -144,10 +145,7 @@ namespace Desktop.Views
             }
         }
 
-        private void BtnBuscar_Click(object sender, EventArgs e)
-        {
-            GridCapacitaciones.DataSource = _capacitaciones.Where(p => p.Nombre.ToUpper().Contains(TxtBuscar.Text.ToUpper())).ToList();
-        }
+        
 
         private void TxtBuscar_TextChanged(object sender, EventArgs e)
         {
@@ -220,5 +218,14 @@ namespace Desktop.Views
                 MessageBox.Show("Debe seleccionar una capacitación para restaurarla", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private async void BtnBuscar_Click_1(object sender, EventArgs e)
+        {
+           GridCapacitaciones.DataSource = await _capacitacionService.GetAllAsync(TxtBuscar.Text);
+        }
+        //private void BtnBuscar_Click(object sender, EventArgs e)
+        //{
+        //    GridCapacitaciones.DataSource = _capacitaciones.Where(p => p.Nombre.ToUpper().Contains(TxtBuscar.Text.ToUpper())).ToList();
+        //} busqueda con datos locales linq
     }
 }
