@@ -1,8 +1,8 @@
 ﻿@page "/Login"
-@inject FirebaseAuthService firebaseAuthService
+@inject FirebaseAuthService _firebaseAuthService
 @inject IJSRuntime js 
-@inject SweetAlertService sweetAlert
-@inject NavigationManager navigationManager
+@inject SweetAlertService _sweetAlert
+@inject NavigationManager _navigationManager
 
 @if (!isAuthenticated) //
 {
@@ -62,18 +62,28 @@ else
     string email = string.Empty;
     string password = string.Empty;
 
+    protected override async Task OnInitializedAsync()
+    {
+        isAuthenticated = await _firebaseAuthService.IsUserAuthenticated();
+    }
+
     private async Task Loguear()
     {
         // Aquí iría la lógica de autenticación real
-        var user = await firebaseAuthService.SignInWithEmailPassword(email, password);
+        var user = await _firebaseAuthService.SignInWithEmailPassword(email, password);
         if (user != null)
         {
+            if (user.EmailVerified == false)
+            {
+                await _sweetAlert.FireAsync("Verificación de correo", "Por favor, verifica tu correo electrónico antes de iniciar sesión.", SweetAlertIcon.Warning);
+                return;
+            }
             isAuthenticated = true; // Simula que el usuario se ha autenticado correctamente
             StateHasChanged(); //metodo que se llama en la pagina para que se reevalue y se redibuje, el estado tiene un cambio
         }
         else
         {
-            await sweetAlert.FireAsync("alert", "Error de autenticación. Por favor, verifica tus credenciales.", SweetAlertIcon.Error);
+            await _sweetAlert.FireAsync("alert", "Error de autenticación. Por favor, verifica tus credenciales.", SweetAlertIcon.Error);
         }
         
     }
@@ -82,12 +92,12 @@ private async Task Desloguear()
         isAuthenticated = false;
         email = string.Empty;
         password = string.Empty;
-        await firebaseAuthService.SignOut();
+        await _firebaseAuthService.SignOut();
         StateHasChanged(); //metodo que se llama en la pagina para que se reevalue y se redibuje, el estado tiene un cambio
     }
     private async Task RegisterMe()
     {
-        navigationManager.NavigateTo("/signin");
+        _navigationManager.NavigateTo("/signin");
     }
 }
 
