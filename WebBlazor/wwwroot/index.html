@@ -22,13 +22,13 @@
     </div>
 
     <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
+        Un error ha ocurrido al procesar la página.
+        <a href="" class="reload">Refrescar</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script> 
     <!-- Firebase Authentication -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
     <!-- Configuración de Firebase -->
     <script>
@@ -43,8 +43,13 @@
         firebase.initializeApp(firebaseConfig);
         console.log(firebase);
         window.firebaseAuth = {
-            signInWithEmailPassword: async function (email, password) {
+            signInWithEmailPassword: async function (email, password, rememberPassword) {
                 try {
+                    if (rememberPassword) {
+                        await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                    } else {
+                        await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+                    }
                     const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
                     console.log(userCredential);
                     return userCredential.user;
@@ -65,10 +70,10 @@
                     user.updateProfile({
                         displayName: displayName
                     });
-                    
+
                     // Enviar correo de verificación
                     user.sendEmailVerification();
-                        
+
                     return userCredential.user.uid;
 
 
@@ -83,18 +88,38 @@
             signOut: async function () {
                 await firebase.auth().signOut();
             }
+
         };
-        window.localStorageHelper = {
-            setItem: function (key, value) {
-                localStorage.setItem(key, value);
-            },
-            getItem: function (key) {
-                return localStorage.getItem(key);
-            },
-            removeItem: function (key) {
-                localStorage.removeItem(key);
+        getUserFirebase: async function () {
+            return new Promise((resolve, reject) => {
+                firebase.auth().onAuthStateChanged((user) => {
+                    if (user) {
+                        provider = user.providerData[0].providerId;
+                        console.log(provider);
+
+                        if (provider == "facebook.com" || provider == "google.com") {
+                            user._delegate.emailVerified = true;
+                        }
+                        resolve(user);
+                    } else {
+                        resolve(null);
+                    }
+                });
+            });
+        };
+
+        loginWithGoogle: async function () {
+            var provider = new firebase.auth.GoogleAuthProvider();
+            try {
+                //const result = await firebase.auth().signInWithRedirect(provider);
+                const result = await firebase.auth().signInWithPopup(provider);
+                return result.user;
+            } catch (error) {
+                console.error("Error durante el inicio de sesión:", error.code, error.message);
+                return null;
             }
         };
+
     </script>
     <script src="_content/CurrieTechnologies.Razor.SweetAlert2/sweetAlert2.min.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>

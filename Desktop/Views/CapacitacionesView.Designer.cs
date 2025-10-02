@@ -145,6 +145,7 @@ namespace Desktop.Views
             TxtBuscar.Name = "TxtBuscar";
             TxtBuscar.Size = new Size(428, 23);
             TxtBuscar.TabIndex = 0;
+            TxtBuscar.TextChanged += TxtBuscar_TextChanged_1;
             // 
             // label2
             // 

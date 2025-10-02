@@ -56,11 +56,11 @@ namespace Desktop.Views
         }
 
 
-
         private void BtnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
 
         private void BtnAgregar_Click(object sender, EventArgs e)
         {
@@ -145,7 +145,7 @@ namespace Desktop.Views
             }
         }
 
-        
+
 
         private void TxtBuscar_TextChanged(object sender, EventArgs e)
         {
@@ -221,7 +221,12 @@ namespace Desktop.Views
 
         private async void BtnBuscar_Click_1(object sender, EventArgs e)
         {
-           GridCapacitaciones.DataSource = await _capacitacionService.GetAllAsync(TxtBuscar.Text);
+            GridCapacitaciones.DataSource = await _capacitacionService.GetAllAsync(TxtBuscar.Text);
+        }
+
+        private void TxtBuscar_TextChanged_1(object sender, EventArgs e)
+        {
+
         }
         //private void BtnBuscar_Click(object sender, EventArgs e)
         //{
