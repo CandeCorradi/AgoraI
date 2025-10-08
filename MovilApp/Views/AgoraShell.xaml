@@ -1,5 +1,3 @@
-
-
 <Shell
     x:Class="MovilApp.Views.AgoraShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -7,6 +5,7 @@
     xmlns:local="clr-namespace:MovilApp"
     xmlns:login="clr-namespace:MovilApp.Views.Login"
     xmlns:contentviews="clr-namespace:MovilApp.ContentViews"
+    xmlns:views="clr-namespace:MovilApp.Views"
     xmlns:viewmodels="clr-namespace:MovilApp.ViewModels"
     FlyoutBehavior="Disabled"
     Title="AgoraApp">
@@ -24,15 +23,22 @@
     <Shell.FlyoutFooter>
         <contentviews:FlyoutFooter />
     </Shell.FlyoutFooter>
+    
+    <ShellContent
+        Title="Iniciar sesión"
+        ContentTemplate="{DataTemplate login:LoginView}"
+        Route="Login" 
+        IsVisible="{Binding UserIsLogout}"
+        FlyoutItemIsVisible="False"/>
 
-    <FlyoutItem Route="nuestra_app" 
-        FlyoutDisplayOptions="AsMultipleItems" x:Name="FlyoutItemsPrincipal" >
+    <FlyoutItem Route="Ágora" 
+        FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent
-            Title="Home"
+            Title="Inicio"
             ContentTemplate="{DataTemplate local:MainPage}"
             Route="MainPage" />
 
-     <!--   <Tab Title="Carreras"
+        <!--   <Tab Title="Carreras"
          Route="carreras"
          Icon="paw.png">
             <ShellContent
@@ -47,14 +53,16 @@
                 Route="AgregarEditarCarrera" />
         </Tab>-->
     </FlyoutItem>
+    <FlyoutItem Title="📖 Buscar Capacitaciones" Icon="search.png">
+        <ShellContent
+        Title="Buscar Capacitaciones"
+        ContentTemplate="{DataTemplate views:CapacitacionesView }"
+        Route="BuscarCapacitaciones" />
+    </FlyoutItem>
     <MenuItem Text="Cerrar sesión"
       Command="{Binding LogoutCommand}"
       IconImageSource="random.png"/>
 
-    <ShellContent
-        Title="Iniciar sesión"
-        ContentTemplate="{DataTemplate login:LoginView}"
-        Route="Login" 
-        IsVisible="{Binding UserIsLogout}"/>
+    
 
 </Shell>

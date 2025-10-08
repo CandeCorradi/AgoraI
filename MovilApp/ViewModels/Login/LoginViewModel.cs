@@ -5,7 +5,6 @@ using Firebase.Auth.Providers;
 using Firebase.Auth.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.Storage;
-using MovilApp;
 using MovilApp.Views;
 
 namespace MovilApp.ViewModels.Login
@@ -62,7 +61,7 @@ namespace MovilApp.ViewModels.Login
                 (_userInfo, _firebaseCredential) = _userRepository.ReadUser();
 
                 var agoraShell = (AgoraShell)App.Current.MainPage;
-                agoraShell.EnableAppAfterLogin();
+                agoraShell.SetLoginState(true);
             }
         }
 
@@ -93,7 +92,7 @@ namespace MovilApp.ViewModels.Login
                 }
 
                 var agoraShell = (AgoraShell)App.Current.MainPage;
-                agoraShell.EnableAppAfterLogin();
+               agoraShell.SetLoginState(true);
 
             }
             catch (FirebaseAuthException error)

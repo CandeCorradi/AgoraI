@@ -11,7 +11,7 @@
         <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
             <Label 
                 FontSize="36"
-                Text="Inicio de sesión a InstitutoApp"
+                Text="Inicio de sesión a ÁgoraApp"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center" />
             <Grid RowDefinitions="2*,2*,2*,*,*,*" ColumnDefinitions="*,*">
