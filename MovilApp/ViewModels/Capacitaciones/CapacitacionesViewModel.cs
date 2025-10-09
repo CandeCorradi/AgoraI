@@ -16,7 +16,7 @@ namespace MovilApp.ViewModels.Capacitaciones
         GenericService<Capacitacion> _capacitacionService = new();
 
         [ObservableProperty]
-        private string textobusqueda = string.Empty;
+        private string textoBusqueda = string.Empty;
 
         [ObservableProperty]
         private bool estaDescargando;
@@ -51,7 +51,7 @@ namespace MovilApp.ViewModels.Capacitaciones
                 EstaDescargando = true;
                 
                 // Obtener todos los libros si no los tenemos
-                var capacitaciones = await _capacitacionService.GetAllAsync(Textobusqueda);
+                var capacitaciones = await _capacitacionService.GetAllAsync(TextoBusqueda);
 
                 Capacitaciones = capacitaciones != null ?
                         new ObservableCollection<Capacitacion>(capacitaciones)
@@ -67,7 +67,7 @@ namespace MovilApp.ViewModels.Capacitaciones
 
         private void OnLimpiar()
         {
-            Textobusqueda = string.Empty;
+            TextoBusqueda = string.Empty;
             // Mantener los filtros pero ejecutar búsqueda limpia
             OnBuscar();
         }        

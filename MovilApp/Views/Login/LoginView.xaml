@@ -8,33 +8,28 @@
     <viewModels:LoginViewModel/>
  </ContentPage.BindingContext>
     <ScrollView>
-        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+        <VerticalStackLayout VerticalOptions="Center" Padding="30">
             <Label 
                 FontSize="36"
                 Text="Inicio de sesión a ÁgoraApp"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center" />
-            <Grid RowDefinitions="2*,2*,2*,*,*,*" ColumnDefinitions="*,*">
-                <Label Grid.Row="0" Grid.Column="0" 
-                       HorizontalTextAlignment="End"
-                       VerticalTextAlignment="Center"
-                       Margin="40,20">Email:</Label>
+            <Grid RowDefinitions="2*,2*,2*,*,*" ColumnDefinitions="auto,*">
+                <Label Grid.Row="0" Grid.Column="0" HorizontalOptions="End" VerticalOptions="Center">Email:</Label>
                 <Entry Grid.Row="0" Grid.Column="1" 
                        Text="{Binding Email}"
-                       Margin="0,10,0,10"></Entry>
+                       Margin="10,10,0,10"></Entry>
 
                 <Label Grid.Row="1" Grid.Column="0" 
-                       HorizontalTextAlignment="End"
-                       VerticalTextAlignment="Center"
-                       Margin="40,20">Contraseña:</Label>
+                       VerticalTextAlignment="Center" HorizontalOptions="End" VerticalOptions="Center">Contraseña:</Label>
                 <Entry Grid.Row="1" Grid.Column="1" 
                        Text="{Binding Password}"
                         IsPassword="True"
-                       Margin="0,10,0,10"></Entry>
+                       Margin="10,10,0,10"></Entry>
                 <CheckBox IsChecked="{Binding RecordarContraseña}"
-                          Grid.Row="2" Grid.Column="0"
-                          HorizontalOptions="End"
+                          Grid.Row="2" Grid.Column="0" 
                           VerticalOptions="Center"
+                          HorizontalOptions="End"
                           ></CheckBox>
                 <Label Grid.Row="2" Grid.Column="1"
                        VerticalOptions="Center"
@@ -45,7 +40,7 @@
                         Grid.Row="3" Grid.Column="0"
                         Command="{Binding IniciarSesionCommand}"
                         Grid.ColumnSpan="2"
-                        Margin="0,10,0,10"
+                        Margin="10,10,0,10"
                         ></Button>
 
                 <Button Text="Registrarse"
@@ -53,17 +48,10 @@
                         Grid.Row="4" Grid.Column="0"
                         Command="{Binding RegistrarseCommand}"
                         Grid.ColumnSpan="2"
-                    
-                        ></Button>
-                <ImageButton 
-                             Grid.Row="5" Grid.Column="0" 
-                             Grid.ColumnSpan="2"
-                             WidthRequest="400"
-                             Margin="0,10,0,10"
-                             x:Name="btnLoginGoogle"
-                            
-                             ></ImageButton>
+                        ></Button>              
+                
             </Grid>
+            <ActivityIndicator IsRunning="{Binding EstaDescargando}"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

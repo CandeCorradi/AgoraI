@@ -30,6 +30,11 @@
         Route="Login" 
         IsVisible="{Binding UserIsLogout}"
         FlyoutItemIsVisible="False"/>
+    <ShellContent
+    Title="Crear cuenta"
+    ContentTemplate="{DataTemplate login:SignInView}"
+    Route="Registrarse"
+    FlyoutItemIsVisible="False"/>
 
     <FlyoutItem Route="Ágora" 
         FlyoutDisplayOptions="AsMultipleItems">
