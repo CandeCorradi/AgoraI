@@ -2,28 +2,24 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
           x:Class="MovilApp.Views.Login.LoginView"
           xmlns:viewModels="clr-namespace:MovilApp.ViewModels.Login"
-          Title="IniciarSesionView"
-          NavigationPage.HasNavigationBar="False">
+          NavigationPage.HasNavigationBar="False"
+          BackgroundColor="Pink">
+    
     <ContentPage.BindingContext>
     <viewModels:LoginViewModel/>
  </ContentPage.BindingContext>
     <ScrollView>
-        <VerticalStackLayout VerticalOptions="Center" Padding="30">
-            <Label 
-                FontSize="36"
-                Text="Inicio de sesión a ÁgoraApp"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center" />
+        <VerticalStackLayout VerticalOptions="Start" Padding="30">
             <Grid RowDefinitions="2*,2*,2*,*,*" ColumnDefinitions="auto,*">
-                <Label Grid.Row="0" Grid.Column="0" HorizontalOptions="End" VerticalOptions="Center">Email:</Label>
+                <Label Grid.Row="0" Grid.Column="0" HorizontalOptions="End" TextColor="DeepPink" VerticalOptions="Center">Email:</Label>
                 <Entry Grid.Row="0" Grid.Column="1" 
-                       Text="{Binding Email}"
+                       Text="{Binding Email}" BackgroundColor="Transparent" TextColor="Black"
                        Margin="10,10,0,10"></Entry>
 
                 <Label Grid.Row="1" Grid.Column="0" 
-                       VerticalTextAlignment="Center" HorizontalOptions="End" VerticalOptions="Center">Contraseña:</Label>
+                       VerticalTextAlignment="Center" HorizontalOptions="End" TextColor="DeepPink" VerticalOptions="Center">Contraseña:</Label>
                 <Entry Grid.Row="1" Grid.Column="1" 
-                       Text="{Binding Password}"
+                       Text="{Binding Password}" BackgroundColor="Transparent" TextColor="Black"
                         IsPassword="True"
                        Margin="10,10,0,10"></Entry>
                 <CheckBox IsChecked="{Binding RecordarContraseña}"
@@ -32,22 +28,34 @@
                           HorizontalOptions="End"
                           ></CheckBox>
                 <Label Grid.Row="2" Grid.Column="1"
-                       VerticalOptions="Center"
+                       VerticalOptions="Center" TextColor="DeepPink"
                        >Recordar contraseña</Label>
 
                 <Button Text="Iniciar sesión"
                         x:Name="btnIniciarSesion"
                         Grid.Row="3" Grid.Column="0"
                         Command="{Binding IniciarSesionCommand}"
-                        Grid.ColumnSpan="2"
-                        Margin="10,10,0,10"
+                        Grid.ColumnSpan="2" 
+                        BackgroundColor="Transparent" 
+                        TextColor="DeepPink" 
+                        FontAttributes="Bold"
+                        BorderColor="DeepPink"
+                        BorderWidth="2"
+                        CornerRadius="8"
+                        Margin="0,0,0,20" 
                         ></Button>
 
                 <Button Text="Registrarse"
                         x:Name="btnRegistrarse"
                         Grid.Row="4" Grid.Column="0"
                         Command="{Binding RegistrarseCommand}"
-                        Grid.ColumnSpan="2"
+                        Grid.ColumnSpan="2" 
+                        BackgroundColor="Transparent" 
+                        TextColor="DeepPink" 
+                        FontAttributes="Bold"
+                         BorderColor="DeepPink"
+                         BorderWidth="2"
+                         CornerRadius="8"
                         ></Button>              
                 
             </Grid>

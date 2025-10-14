@@ -17,7 +17,7 @@ namespace MovilApp.ViewModels.Login
         private FirebaseCredential _firebaseCredential;
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(IniciarSesionCommand))]
+        [NotifyCanExecuteChangedFor(nameof(IniciarSesionCommand))] //avisarle al inicial que recalcule si puede ser ejecutado o no
         private string email;
 
         [ObservableProperty]

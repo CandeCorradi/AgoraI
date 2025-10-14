@@ -21,28 +21,34 @@ namespace MovilApp.ViewModels.Login
         public IRelayCommand VolverCommand { get; }
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
         private string name;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
         private string lastname;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
         private string dni;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
         private string email;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
         private string password;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
         private string verifyPassword;
 
         public SignInViewModel()
         {
             FirebaseApiKey = Service.Properties.Resources.ApiKeyFirebase;
             RequestUri = "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + FirebaseApiKey;
-            RegistrarseCommand = new AsyncRelayCommand(Registrarse);
+            RegistrarseCommand = new AsyncRelayCommand(Registrarse, PermitirRegistrarse);
             VolverCommand = new AsyncRelayCommand(Volver);
             _clientAuth = new FirebaseAuthClient(new FirebaseAuthConfig()
             {
@@ -53,6 +59,13 @@ namespace MovilApp.ViewModels.Login
                         new EmailProvider()
                 }
             });
+        }
+
+        private bool PermitirRegistrarse()
+        {
+            return !string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Email) 
+                && !string.IsNullOrEmpty(Password) && !string.IsNullOrEmpty(VerifyPassword)
+                && !string.IsNullOrEmpty(Dni) && !string.IsNullOrEmpty(Lastname);
         }
 
         private async Task Volver()

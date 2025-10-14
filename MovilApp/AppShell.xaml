@@ -5,7 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MovilApp"
     Shell.FlyoutBehavior="Disabled"
-    Title="MovilApp">
+    Title="MovilApp"
+    BackgroundColor="Pink">
 
     <ShellContent
         Title="Home"
