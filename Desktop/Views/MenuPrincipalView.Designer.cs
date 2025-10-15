@@ -32,9 +32,12 @@
             SubMenuPrincipal = new FontAwesome.Sharp.IconMenuItem();
             SubMenuUsuarios = new FontAwesome.Sharp.IconMenuItem();
             subMenuCapacitaciones = new FontAwesome.Sharp.IconMenuItem();
+            subMenuTiposDeInscripciones = new ToolStripMenuItem();
             SubMenuSalir = new FontAwesome.Sharp.IconMenuItem();
             SubMenuSalirDelSistema = new FontAwesome.Sharp.IconMenuItem();
             toolStrip1 = new ToolStrip();
+            toolStripSeparator1 = new ToolStripSeparator();
+            SubMenuInscripciones = new ToolStripMenuItem();
             menuPrincipal.SuspendLayout();
             SuspendLayout();
             // 
@@ -51,7 +54,7 @@
             // 
             // SubMenuPrincipal
             // 
-            SubMenuPrincipal.DropDownItems.AddRange(new ToolStripItem[] { SubMenuUsuarios, subMenuCapacitaciones });
+            SubMenuPrincipal.DropDownItems.AddRange(new ToolStripItem[] { SubMenuUsuarios, subMenuCapacitaciones, subMenuTiposDeInscripciones, toolStripSeparator1, SubMenuInscripciones });
             SubMenuPrincipal.IconChar = FontAwesome.Sharp.IconChar.HomeLg;
             SubMenuPrincipal.IconColor = Color.Black;
             SubMenuPrincipal.IconFont = FontAwesome.Sharp.IconFont.Auto;
@@ -65,7 +68,7 @@
             SubMenuUsuarios.IconColor = Color.Black;
             SubMenuUsuarios.IconFont = FontAwesome.Sharp.IconFont.Auto;
             SubMenuUsuarios.Name = "SubMenuUsuarios";
-            SubMenuUsuarios.Size = new Size(188, 30);
+            SubMenuUsuarios.Size = new Size(198, 30);
             SubMenuUsuarios.Text = "Usuarios";
             SubMenuUsuarios.Click += SubMenuUsuarios_Click;
             // 
@@ -75,9 +78,16 @@
             subMenuCapacitaciones.IconColor = Color.Black;
             subMenuCapacitaciones.IconFont = FontAwesome.Sharp.IconFont.Auto;
             subMenuCapacitaciones.Name = "subMenuCapacitaciones";
-            subMenuCapacitaciones.Size = new Size(188, 30);
+            subMenuCapacitaciones.Size = new Size(198, 30);
             subMenuCapacitaciones.Text = "Capacitaciones";
             subMenuCapacitaciones.Click += subMenuCapacitaciones_Click;
+            // 
+            // subMenuTiposDeInscripciones
+            // 
+            subMenuTiposDeInscripciones.Name = "subMenuTiposDeInscripciones";
+            subMenuTiposDeInscripciones.Size = new Size(198, 30);
+            subMenuTiposDeInscripciones.Text = "Tipos de Inscripciones";
+            subMenuTiposDeInscripciones.Click += subMenuTiposDeInscripciones_Click;
             // 
             // SubMenuSalir
             // 
@@ -108,6 +118,18 @@
             toolStrip1.TabIndex = 2;
             toolStrip1.Text = "toolStrip1";
             // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(195, 6);
+            // 
+            // SubMenuInscripciones
+            // 
+            SubMenuInscripciones.Name = "SubMenuInscripciones";
+            SubMenuInscripciones.Size = new Size(198, 30);
+            SubMenuInscripciones.Text = "Inscripciones";
+            SubMenuInscripciones.Click += SubMenuInscripciones_Click;
+            // 
             // MenuPrincipalView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -136,5 +158,8 @@
         private FontAwesome.Sharp.IconMenuItem SubMenuSalirDelSistema;
         private FontAwesome.Sharp.IconMenuItem SubMenuUsuarios;
         private FontAwesome.Sharp.IconMenuItem subMenuCapacitaciones;
+        private ToolStripMenuItem subMenuTiposDeInscripciones;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem SubMenuInscripciones;
     }
 }

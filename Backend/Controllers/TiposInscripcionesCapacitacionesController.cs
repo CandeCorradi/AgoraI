@@ -23,7 +23,7 @@ namespace Backend.Controllers
 
         // GET: api/TiposInscripcionesCapacitaciones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TipoInscripcionCapacitacion>>> GetTiposInscripcionesCapacitaciones()
+        public async Task<ActionResult<IEnumerable<TipoInscripcionCapacitacion>>> GetTiposInscripcionesCapacitaciones([FromQuery] string ? filter ="")
         {
             return await _context.TiposInscripcionesCapacitaciones.Include(t => t.Capacitacion).Include(t => t.TipoInscripcion).ToListAsync();
         }
