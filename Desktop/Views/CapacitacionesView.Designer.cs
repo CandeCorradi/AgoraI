@@ -79,7 +79,7 @@ namespace Desktop.Views
             TabControl.Margin = new Padding(2);
             TabControl.Name = "TabControl";
             TabControl.SelectedIndex = 0;
-            TabControl.Size = new Size(844, 298);
+            TabControl.Size = new Size(844, 408);
             TabControl.TabIndex = 6;
             // 
             // TabPageLista
@@ -247,7 +247,7 @@ namespace Desktop.Views
             TabPageAgregarEditar.Margin = new Padding(2);
             TabPageAgregarEditar.Name = "TabPageAgregarEditar";
             TabPageAgregarEditar.Padding = new Padding(2);
-            TabPageAgregarEditar.Size = new Size(836, 270);
+            TabPageAgregarEditar.Size = new Size(836, 380);
             TabPageAgregarEditar.TabIndex = 0;
             TabPageAgregarEditar.Text = "Agregar/Editar";
             TabPageAgregarEditar.UseVisualStyleBackColor = true;
@@ -361,7 +361,7 @@ namespace Desktop.Views
             BtnCancelar.IconColor = Color.Black;
             BtnCancelar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtnCancelar.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnCancelar.Location = new Point(543, 190);
+            BtnCancelar.Location = new Point(300, 309);
             BtnCancelar.Margin = new Padding(2);
             BtnCancelar.Name = "BtnCancelar";
             BtnCancelar.Size = new Size(111, 48);
@@ -378,7 +378,7 @@ namespace Desktop.Views
             BtnGuardar.IconColor = Color.Black;
             BtnGuardar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnGuardar.Location = new Point(395, 190);
+            BtnGuardar.Location = new Point(152, 309);
             BtnGuardar.Margin = new Padding(2);
             BtnGuardar.Name = "BtnGuardar";
             BtnGuardar.Size = new Size(119, 48);
@@ -413,7 +413,7 @@ namespace Desktop.Views
             // 
             statusStrip1.ImageScalingSize = new Size(24, 24);
             statusStrip1.Items.AddRange(new ToolStripItem[] { LabelStatusMessage });
-            statusStrip1.Location = new Point(0, 369);
+            statusStrip1.Location = new Point(0, 479);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new Padding(1, 0, 10, 0);
             statusStrip1.Size = new Size(867, 22);
@@ -434,7 +434,7 @@ namespace Desktop.Views
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(867, 391);
+            ClientSize = new Size(867, 501);
             Controls.Add(statusStrip1);
             Controls.Add(panel1);
             Controls.Add(TabControl);
