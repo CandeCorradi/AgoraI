@@ -43,6 +43,13 @@ namespace Desktop.Views
             BtnAgregar = new FontAwesome.Sharp.IconButton();
             BtnModificar = new FontAwesome.Sharp.IconButton();
             TabPageAgregarEditar = new TabPage();
+            BtnQuitar = new Button();
+            BtnAnadir = new Button();
+            numericCosto = new NumericUpDown();
+            CmbTiposInscripciones = new ComboBox();
+            label9 = new Label();
+            label7 = new Label();
+            GridTiposDeInscripciones = new DataGridView();
             checkInscripcionAbierta = new CheckBox();
             label8 = new Label();
             TxtPonente = new TextBox();
@@ -65,6 +72,8 @@ namespace Desktop.Views
             TabPageLista.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)GridCapacitaciones).BeginInit();
             TabPageAgregarEditar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericCosto).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)GridTiposDeInscripciones).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericCupo).BeginInit();
             panel1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -98,7 +107,7 @@ namespace Desktop.Views
             TabPageLista.Margin = new Padding(2);
             TabPageLista.Name = "TabPageLista";
             TabPageLista.Padding = new Padding(2);
-            TabPageLista.Size = new Size(836, 270);
+            TabPageLista.Size = new Size(836, 380);
             TabPageLista.TabIndex = 1;
             TabPageLista.Text = "Lista";
             TabPageLista.UseVisualStyleBackColor = true;
@@ -230,6 +239,13 @@ namespace Desktop.Views
             // 
             // TabPageAgregarEditar
             // 
+            TabPageAgregarEditar.Controls.Add(BtnQuitar);
+            TabPageAgregarEditar.Controls.Add(BtnAnadir);
+            TabPageAgregarEditar.Controls.Add(numericCosto);
+            TabPageAgregarEditar.Controls.Add(CmbTiposInscripciones);
+            TabPageAgregarEditar.Controls.Add(label9);
+            TabPageAgregarEditar.Controls.Add(label7);
+            TabPageAgregarEditar.Controls.Add(GridTiposDeInscripciones);
             TabPageAgregarEditar.Controls.Add(checkInscripcionAbierta);
             TabPageAgregarEditar.Controls.Add(label8);
             TabPageAgregarEditar.Controls.Add(TxtPonente);
@@ -252,10 +268,77 @@ namespace Desktop.Views
             TabPageAgregarEditar.Text = "Agregar/Editar";
             TabPageAgregarEditar.UseVisualStyleBackColor = true;
             // 
+            // BtnQuitar
+            // 
+            BtnQuitar.Location = new Point(707, 271);
+            BtnQuitar.Name = "BtnQuitar";
+            BtnQuitar.Size = new Size(75, 23);
+            BtnQuitar.TabIndex = 34;
+            BtnQuitar.Text = "Quitar";
+            BtnQuitar.UseVisualStyleBackColor = true;
+            BtnQuitar.Click += BtnQuitar_Click;
+            // 
+            // BtnAnadir
+            // 
+            BtnAnadir.Location = new Point(707, 125);
+            BtnAnadir.Name = "BtnAnadir";
+            BtnAnadir.Size = new Size(75, 23);
+            BtnAnadir.TabIndex = 33;
+            BtnAnadir.Text = "Añadir";
+            BtnAnadir.UseVisualStyleBackColor = true;
+            BtnAnadir.Click += BtnAnadir_Click;
+            // 
+            // numericCosto
+            // 
+            numericCosto.Location = new Point(618, 127);
+            numericCosto.Maximum = new decimal(new int[] { 9999999, 0, 0, 0 });
+            numericCosto.Name = "numericCosto";
+            numericCosto.Size = new Size(83, 23);
+            numericCosto.TabIndex = 32;
+            // 
+            // CmbTiposInscripciones
+            // 
+            CmbTiposInscripciones.FormattingEnabled = true;
+            CmbTiposInscripciones.Location = new Point(387, 126);
+            CmbTiposInscripciones.Name = "CmbTiposInscripciones";
+            CmbTiposInscripciones.Size = new Size(221, 23);
+            CmbTiposInscripciones.TabIndex = 31;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(618, 107);
+            label9.Name = "label9";
+            label9.Size = new Size(41, 15);
+            label9.TabIndex = 30;
+            label9.Text = "Costo:";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(387, 106);
+            label7.Name = "label7";
+            label7.Size = new Size(224, 15);
+            label7.TabIndex = 29;
+            label7.Text = "Tipos de inscripciones de la capacitación:";
+            // 
+            // GridTiposDeInscripciones
+            // 
+            GridTiposDeInscripciones.AllowUserToAddRows = false;
+            GridTiposDeInscripciones.AllowUserToDeleteRows = false;
+            GridTiposDeInscripciones.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            GridTiposDeInscripciones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            GridTiposDeInscripciones.Location = new Point(387, 155);
+            GridTiposDeInscripciones.Name = "GridTiposDeInscripciones";
+            GridTiposDeInscripciones.ReadOnly = true;
+            GridTiposDeInscripciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            GridTiposDeInscripciones.Size = new Size(314, 139);
+            GridTiposDeInscripciones.TabIndex = 28;
+            // 
             // checkInscripcionAbierta
             // 
             checkInscripcionAbierta.AutoSize = true;
-            checkInscripcionAbierta.Location = new Point(395, 154);
+            checkInscripcionAbierta.Location = new Point(152, 172);
             checkInscripcionAbierta.Name = "checkInscripcionAbierta";
             checkInscripcionAbierta.Size = new Size(123, 19);
             checkInscripcionAbierta.TabIndex = 5;
@@ -265,7 +348,7 @@ namespace Desktop.Views
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(64, 158);
+            label8.Location = new Point(68, 102);
             label8.Margin = new Padding(2, 0, 2, 0);
             label8.Name = "label8";
             label8.Size = new Size(79, 15);
@@ -274,7 +357,7 @@ namespace Desktop.Views
             // 
             // TxtPonente
             // 
-            TxtPonente.Location = new Point(153, 113);
+            TxtPonente.Location = new Point(152, 66);
             TxtPonente.Margin = new Padding(2);
             TxtPonente.Name = "TxtPonente";
             TxtPonente.Size = new Size(628, 23);
@@ -282,7 +365,7 @@ namespace Desktop.Views
             // 
             // numericCupo
             // 
-            numericCupo.Location = new Point(153, 188);
+            numericCupo.Location = new Point(152, 131);
             numericCupo.Name = "numericCupo";
             numericCupo.Size = new Size(78, 23);
             numericCupo.TabIndex = 4;
@@ -292,7 +375,7 @@ namespace Desktop.Views
             // 
             dateTimeFechaHora.CustomFormat = "dd/MM/yyyy HH:mm";
             dateTimeFechaHora.Format = DateTimePickerFormat.Custom;
-            dateTimeFechaHora.Location = new Point(153, 152);
+            dateTimeFechaHora.Location = new Point(152, 97);
             dateTimeFechaHora.Name = "dateTimeFechaHora";
             dateTimeFechaHora.Size = new Size(149, 23);
             dateTimeFechaHora.TabIndex = 3;
@@ -301,7 +384,7 @@ namespace Desktop.Views
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(104, 190);
+            label6.Location = new Point(103, 138);
             label6.Margin = new Padding(2, 0, 2, 0);
             label6.Name = "label6";
             label6.Size = new Size(39, 15);
@@ -311,7 +394,7 @@ namespace Desktop.Views
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(85, 116);
+            label5.Location = new Point(88, 69);
             label5.Margin = new Padding(2, 0, 2, 0);
             label5.Name = "label5";
             label5.Size = new Size(58, 15);
@@ -320,7 +403,7 @@ namespace Desktop.Views
             // 
             // TxtDetalle
             // 
-            TxtDetalle.Location = new Point(153, 75);
+            TxtDetalle.Location = new Point(152, 35);
             TxtDetalle.Margin = new Padding(2);
             TxtDetalle.Name = "TxtDetalle";
             TxtDetalle.Size = new Size(628, 23);
@@ -329,7 +412,7 @@ namespace Desktop.Views
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(97, 78);
+            label4.Location = new Point(96, 38);
             label4.Margin = new Padding(2, 0, 2, 0);
             label4.Name = "label4";
             label4.Size = new Size(46, 15);
@@ -338,7 +421,7 @@ namespace Desktop.Views
             // 
             // TxtNombre
             // 
-            TxtNombre.Location = new Point(153, 37);
+            TxtNombre.Location = new Point(152, 4);
             TxtNombre.Margin = new Padding(2);
             TxtNombre.Name = "TxtNombre";
             TxtNombre.Size = new Size(628, 23);
@@ -347,7 +430,7 @@ namespace Desktop.Views
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(89, 40);
+            label3.Location = new Point(88, 7);
             label3.Margin = new Padding(2, 0, 2, 0);
             label3.Name = "label3";
             label3.Size = new Size(54, 15);
@@ -361,10 +444,10 @@ namespace Desktop.Views
             BtnCancelar.IconColor = Color.Black;
             BtnCancelar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtnCancelar.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnCancelar.Location = new Point(300, 309);
+            BtnCancelar.Location = new Point(418, 342);
             BtnCancelar.Margin = new Padding(2);
             BtnCancelar.Name = "BtnCancelar";
-            BtnCancelar.Size = new Size(111, 48);
+            BtnCancelar.Size = new Size(104, 21);
             BtnCancelar.TabIndex = 7;
             BtnCancelar.Text = "&Cancelar";
             BtnCancelar.TextAlign = ContentAlignment.MiddleRight;
@@ -378,10 +461,10 @@ namespace Desktop.Views
             BtnGuardar.IconColor = Color.Black;
             BtnGuardar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnGuardar.Location = new Point(152, 309);
+            BtnGuardar.Location = new Point(285, 342);
             BtnGuardar.Margin = new Padding(2);
             BtnGuardar.Name = "BtnGuardar";
-            BtnGuardar.Size = new Size(119, 48);
+            BtnGuardar.Size = new Size(114, 21);
             BtnGuardar.TabIndex = 6;
             BtnGuardar.Text = "&Guardar";
             BtnGuardar.TextAlign = ContentAlignment.MiddleRight;
@@ -446,6 +529,8 @@ namespace Desktop.Views
             ((System.ComponentModel.ISupportInitialize)GridCapacitaciones).EndInit();
             TabPageAgregarEditar.ResumeLayout(false);
             TabPageAgregarEditar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericCosto).EndInit();
+            ((System.ComponentModel.ISupportInitialize)GridTiposDeInscripciones).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericCupo).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -489,5 +574,12 @@ namespace Desktop.Views
         private DateTimePicker dateTimeFechaHora;
         private CheckBox checkInscripcionAbierta;
         private Label label8;
+        private Button BtnAnadir;
+        private NumericUpDown numericCosto;
+        private ComboBox CmbTiposInscripciones;
+        private Label label9;
+        private Label label7;
+        private DataGridView GridTiposDeInscripciones;
+        private Button BtnQuitar;
     }
 }

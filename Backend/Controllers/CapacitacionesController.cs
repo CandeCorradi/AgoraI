@@ -28,6 +28,20 @@ namespace Backend.Controllers
             return await _context.Capacitaciones.Where(c => c.Nombre.Contains(filter) || c.Detalle.Contains(filter) || c.Ponente.Contains(filter)).ToListAsync();
         }
 
+
+        [HttpGet("abiertas/{id}")]
+        public async Task<ActionResult<IEnumerable<Capacitacion>>> GetCapacitacionesAbiertas ([FromQuery] string? filter = "")
+        {
+            return await _context.Capacitaciones.Where(c => !c.InscripcionAbierta &&(c.Nombre.Contains(filter) || c.Detalle.Contains(filter) || c.Ponente.Contains(filter))).ToListAsync();
+        }
+
+        [HttpGet("futuras/{id}")]
+        public async Task<ActionResult<IEnumerable<Capacitacion>>> GetCapacitacionesFuturas([FromQuery] string? filter = "")
+        {
+            return await _context.Capacitaciones.Where(c => !c.InscripcionAbierta && c.FechaHora.Date > DateTime.Now.Date && (c.Nombre.Contains(filter) 
+            || c.Detalle.Contains(filter) || c.Ponente.Contains(filter))).ToListAsync();
+        }
+
         // GET: api/Capacitaciones
         [HttpGet("deleteds/")]
         public async Task<ActionResult<IEnumerable<Capacitacion>>> GetCapacitacionesDeleteds()

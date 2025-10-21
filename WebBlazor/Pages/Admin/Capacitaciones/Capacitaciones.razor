@@ -1,0 +1,84 @@
+﻿@page "/capacitaciones"
+@inject IGenericService<Capacitacion> _serviceCapacitacion
+@inject SweetAlertService _sweetAlert
+
+<PageTitle>Capacitaciones</PageTitle>
+
+<h1>Capacitaciones</h1>
+
+@if(capacitaciones == null)
+{
+    <p><em>Cargando la lista de capacitaciones...</em></p>
+}
+else if(!capacitaciones.Any())
+{
+    <p><em>No hay capacitaciones disponibles.</em></p>
+}
+else
+{
+    <NavLink class="btn btn-info" href=@($"NuevoEditarCapacitacion")>
+        Agregar capacitación
+    </NavLink>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Orador/a</th>
+                <th>Fecha</th>
+                <th colspan="2">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var cap in capacitaciones)
+            {
+                <tr>
+                    <td>@cap.Nombre</td>
+                    <td>@cap.Ponente</td>
+                    <td>@cap.FechaHora</td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="() => DeleteCapacitacion(cap)">Eliminar</button>
+                    </td>
+                    <td>
+                        <NavLink class="btn btn-info" href=@($"NuevoEditarCapacitacion?idCapacitacion={cap.Id}")>
+                            Editar
+                        </NavLink>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private List<Capacitacion>? capacitaciones;
+
+    protected override async Task OnInitializedAsync()
+    {
+        capacitaciones = (await _serviceCapacitacion.GetAllAsync(null))?.ToList();
+    }
+    private async Task DeleteCapacitacion(Capacitacion capacitacion)
+    {
+        var respuesta = await _sweetAlert.FireAsync(new SweetAlertOptions
+        {
+            Title = "¿Estás seguro?",
+            Text = $"¿Deseas eliminar la capacitación '{capacitacion.Nombre}'?",
+            Icon = SweetAlertIcon.Warning,
+            ShowCancelButton = true,
+            ConfirmButtonText = "Sí, eliminar",
+            CancelButtonText = "Cancelar"
+        });
+        if (respuesta.IsConfirmed)
+        {
+            if (await _serviceCapacitacion.DeleteAsync(capacitacion.Id))
+            {
+                capacitaciones?.Remove(capacitacion);
+                StateHasChanged();
+            }else
+            {
+                await _sweetAlert.FireAsync("Error", "No se pudo eliminar la capacitación.", SweetAlertIcon.Error);
+            }
+        }
+
+    }
+}

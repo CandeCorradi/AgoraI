@@ -7,14 +7,9 @@ using System.Threading.Tasks;
 
 namespace Service.Interfaces
 {
-    internal interface IInscripcionService
+    public interface ICapacitacionService : IGenericService<Capacitacion>
     {
+        public Task<List<Capacitacion>?> GetCapacitacionesAbiertasAsync();
+        public Task<List<Capacitacion>?> GetCapacitacionesFuturasAsync();
     }
-    public interface IInsripcionService : IGenericService<Inscripcion>
-    {
-        public Task<List<Inscripcion>?> GetIscriptosAsync(string email);
-    }
-
-
-
 }

@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Threading.Tasks;
+using Desktop.ExtensionMethod;
 using Service.Models;
 using Service.Services;
 
@@ -7,7 +8,8 @@ namespace Desktop.Views
 {
     public partial class CapacitacionesView : Form
     {
-        GenericService<Capacitacion> _capacitacionService = new GenericService<Capacitacion>();
+        GenericService<Capacitacion> _capacitacionService = new();
+        GenericService<TipoInscripcion> _tipoInscripcionService = new();
         Capacitacion _currentCapacitacion;
         List<Capacitacion>? _capacitaciones;
 
@@ -43,7 +45,15 @@ namespace Desktop.Views
             GridCapacitaciones.DataSource = _capacitaciones;
             GridCapacitaciones.Columns["Id"].Visible = false; // Ocultar la columna Capacitaciones
             GridCapacitaciones.Columns["IsDeleted"].Visible = false; // Ocultar la columna Eliminado
+            await GetComboTiposDeInscripciones();
 
+        }
+
+        private async Task GetComboTiposDeInscripciones()
+        {
+            CmbTiposInscripciones.DataSource = await _tipoInscripcionService.GetAllAsync();
+            CmbTiposInscripciones.DisplayMember = "Nombre";
+            CmbTiposInscripciones.ValueMember = "Id";
         }
 
         private void GridPeliculas_SelectionChanged_1(object sender, EventArgs e)
@@ -76,6 +86,7 @@ namespace Desktop.Views
             checkInscripcionAbierta.Checked = false;
             numericCupo.Value = 1;
             TxtDetalle.Clear();
+            GridTiposDeInscripciones.DataSource = null;
         }
 
         private void BtnCancelar_Click(object sender, EventArgs e)
@@ -228,9 +239,28 @@ namespace Desktop.Views
         {
 
         }
-        //private void BtnBuscar_Click(object sender, EventArgs e)
-        //{
-        //    GridCapacitaciones.DataSource = _capacitaciones.Where(p => p.Nombre.ToUpper().Contains(TxtBuscar.Text.ToUpper())).ToList();
-        //} busqueda con datos locales linq
+
+        private void BtnAnadir_Click(object sender, EventArgs e)
+        {
+            var tipoInscripcionCapacitacion = new TipoInscripcionCapacitacion
+            {
+                TipoInscripcionId = (int)CmbTiposInscripciones.SelectedValue,
+                TipoInscripcion = (TipoInscripcion)CmbTiposInscripciones.SelectedItem,
+                CapacitacionId = _currentCapacitacion?.Id ?? 0,
+                Capacitacion = _currentCapacitacion,
+                Costo = numericCosto.Value
+
+            };
+            _currentCapacitacion?.TiposDeInscripciones.Add(tipoInscripcionCapacitacion);
+            GridTiposDeInscripciones.DataSource = null;
+            GridTiposDeInscripciones.HideColumns("Id", "CapacitacionId", "Capacitacion", "TipoInscripcionId", "IsDeleted");
+        }
+
+        private void BtnQuitar_Click(object sender, EventArgs e)
+        {
+            var tipoInscripcionCapacitacionSeleccionada = (TipoInscripcionCapacitacion)GridTiposDeInscripciones.SelectedRows[0].DataBoundItem;
+            _currentCapacitacion?.TiposDeInscripciones.Remove(tipoInscripcionCapacitacionSeleccionada);
+            GridTiposDeInscripciones.DataSource = _currentCapacitacion?.TiposDeInscripciones.ToList();
+        }
     }
 }
