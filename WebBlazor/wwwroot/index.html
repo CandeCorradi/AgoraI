@@ -23,22 +23,20 @@
 
     <div id="blazor-error-ui">
         Un error ha ocurrido al procesar la página.
-        <a href="" class="reload">Refrescar</a>
+        <a href="" class="reload">Recargar</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script> 
-    <!-- Firebase Authentication -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
     <!-- Configuración de Firebase -->
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSyCdbfjPQRrFg4r4kfj3GP8RZxqxEgR7RwY",
-            authDomain: "agora-2354e.firebaseapp.com",
-            projectId: "agora-2354e",
-            storageBucket: "agora-2354e.firebasestorage.app",
-            messagingSenderId: "216817573687",
-            appId: "1:216817573687:web:813330291dba01604c04b2"
+            apiKey: "AIzaSyBcYubUSnxvl3dke68Z5lpyYiZkFvSJX-Q",
+            authDomain: "agora-75589.firebaseapp.com",
+            projectId: "agora-75589",
+            storageBucket: "agora-75589.firebasestorage.app",
+            messagingSenderId: "1053739663238",
+            appId: "1:1053739663238:web:34b490fd527345d7bf7607"
         };
         firebase.initializeApp(firebaseConfig);
         console.log(firebase);
@@ -60,8 +58,8 @@
             },
             createUserWithEmailAndPassword: async function (email, password, displayName) {
                 try {
-                    //imprimir por consola los parámetros que llegan
-                    console.log(`email=${email} password ${displayName}`);
+                    //imprimo por consola los parámetros que llegan
+                    console.log(`email=${email} password=${password} displayName=${displayName}`)
                     const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
                     // El usuario se ha creado correctamente
                     const user = userCredential.user;
@@ -71,7 +69,7 @@
                         displayName: displayName
                     });
 
-                    // Enviar correo de verificación
+                    //Enviar correo de verificación
                     user.sendEmailVerification();
 
                     return userCredential.user.uid;
@@ -87,36 +85,35 @@
 
             signOut: async function () {
                 await firebase.auth().signOut();
-            }
+            },
 
-        };
-        getUserFirebase: async function () {
-            return new Promise((resolve, reject) => {
-                firebase.auth().onAuthStateChanged((user) => {
-                    if (user) {
-                        provider = user.providerData[0].providerId;
-                        console.log(provider);
+            getUserFirebase: async function () {
+                return new Promise((resolve, reject) => {
+                    firebase.auth().onAuthStateChanged((user) => {
+                        if (user) {
+                            provider = user.providerData[0].providerId;
+                            console.log(provider);
 
-                        if (provider == "facebook.com" || provider == "google.com") {
-                            user._delegate.emailVerified = true;
+                            if (provider == "facebook.com" || provider == "google.com") {
+                                user._delegate.emailVerified = true;
+                            }
+                            resolve(user);
+                        } else {
+                            resolve(null);
                         }
-                        resolve(user);
-                    } else {
-                        resolve(null);
-                    }
+                    });
                 });
-            });
-        };
-
-        loginWithGoogle: async function () {
-            var provider = new firebase.auth.GoogleAuthProvider();
-            try {
-                //const result = await firebase.auth().signInWithRedirect(provider);
-                const result = await firebase.auth().signInWithPopup(provider);
-                return result.user;
-            } catch (error) {
-                console.error("Error durante el inicio de sesión:", error.code, error.message);
-                return null;
+            },
+            loginWithGoogle: async function () {
+                var provider = new firebase.auth.GoogleAuthProvider();
+                try {
+                    //const result = await firebase.auth().signInWithRedirect(provider);
+                    const result = await firebase.auth().signInWithPopup(provider);
+                    return result.user;
+                } catch (error) {
+                    console.error("Error durante el inicio de sesión:", error.code, error.message);
+                    return null;
+                }
             }
         };
 
