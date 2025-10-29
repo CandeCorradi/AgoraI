@@ -10,13 +10,17 @@ string? cadenaConexion = configuration.GetConnectionString("mysqlRemote");
 
 //configuración de inyección de dependencias del DBContext
 builder.Services.AddDbContext<AgoraContext>(
-    options => options.UseMySql(cadenaConexion,
-                                ServerVersion.AutoDetect(cadenaConexion),
-                    options => options.EnableRetryOnFailure(
-                                        maxRetryCount: 5,
-                                        maxRetryDelay: System.TimeSpan.FromSeconds(30),
-                                       errorNumbersToAdd: null)
-                                ));
+    dbOptions => dbOptions.UseMySql(
+        cadenaConexion,
+        ServerVersion.AutoDetect(cadenaConexion),
+        mySqlOptions => mySqlOptions
+            .EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: System.TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null)
+            .EnableStringComparisonTranslations() // Habilita traducción de StringComparison (Contains, StartsWith, etc.)
+    )
+);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
