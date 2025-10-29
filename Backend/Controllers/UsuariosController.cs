@@ -84,9 +84,13 @@ namespace Backend.Controllers
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
             //controlamos que el email no esté repetido
-            if (_context.Usuarios.Any(u => u.Email == usuario.Email))
+            if (_context.Usuarios.IgnoreQueryFilters().Any(u => u.Email == usuario.Email))
             {
-                return Conflict("Error, existe un usuario ya registrado con ese mail.");
+                return Conflict("Error, existe un usuario ya registrado con ese email.");
+            }
+            if (_context.Usuarios.IgnoreQueryFilters().Any(u => u.Dni.Trim().Replace(".", "") == usuario.Dni.Trim().Replace(".", "")))
+            {
+                return Conflict("Error, existe un usuario ya registrado con ese DNI.");
             }
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
