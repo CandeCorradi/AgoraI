@@ -26,13 +26,11 @@ else
                         <label class="form-label">Ponente:</label>
                         <InputText class="form-control mb-2" type="text" @bind-Value="capacitacion.Ponente" />
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Fecha y hora:</label>
-                        <InputDate class="form-control mb-2" @bind-Value="capacitacion.FechaHora" />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Cupo:</label>
-                        <InputNumber class="form-control mb-2" type="text" @bind-Value="capacitacion.Cupo" />
+                    <div class="form-group">                    
+                        <label>Fecha y hora:</label>
+                        <input class="form-control mb-2"
+                         type="datetime-local"
+                         @bind="capacitacion.FechaHora" />
                     </div>
 
                     <div class="form-group">
@@ -73,6 +71,7 @@ else
     private async Task Guardar()
     {
         //logger.LogInformation(campania.PropertiesToString());
+        //combinamos la fecha y hora en un solo DateTime
         if (idCapacitacion != null)
             await _capacitacionService.UpdateAsync(capacitacion);
         else

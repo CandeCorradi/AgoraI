@@ -1,6 +1,8 @@
 ﻿@page "/capacitaciones"
 @inject IGenericService<Capacitacion> _serviceCapacitacion
 @inject SweetAlertService _sweetAlert
+@inject FirebaseAuthService _firebaseAuthService
+@inject NavigationManager _navigationManager
 
 <PageTitle>Capacitaciones</PageTitle>
 
@@ -16,7 +18,7 @@ else if(!capacitaciones.Any())
 }
 else
 {
-    <NavLink class="btn btn-info" href=@($"NuevoEditarCapacitacion")>
+    <NavLink class="btn btn-primary" href=@($"NuevoEditarCapacitacion")>
         Agregar capacitación
     </NavLink>
     <table class="table">
@@ -39,7 +41,7 @@ else
                         <button class="btn btn-danger" @onclick="() => DeleteCapacitacion(cap)">Eliminar</button>
                     </td>
                     <td>
-                        <NavLink class="btn btn-info" href=@($"NuevoEditarCapacitacion?idCapacitacion={cap.Id}")>
+                        <NavLink class="btn btn-primary" href=@($"NuevoEditarCapacitacion?idCapacitacion={cap.Id}")>
                             Editar
                         </NavLink>
                     </td>
@@ -55,6 +57,12 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        if (!await _firebaseAuthService.IsUserAuthenticated())
+        {
+            _navigationManager.NavigateTo("/login");
+            return;
+        }
+
         capacitaciones = (await _serviceCapacitacion.GetAllAsync(null))?.ToList();
     }
     private async Task DeleteCapacitacion(Capacitacion capacitacion)

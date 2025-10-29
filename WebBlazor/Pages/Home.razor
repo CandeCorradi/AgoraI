@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using System.Diagnostics
 @inject ICapacitacionService _capacitacionService
 
 <PageTitle>Inicio</PageTitle>
@@ -9,32 +10,59 @@
     Su objetivo es brindar una plataforma integral para gestionar capacitaciones de una institución educativa: 
     desde la publicación y la inscripción (online/presencial), hasta la acreditación, cobros y emisión de certificados.</h4>
 
-@if(capacitacionesAbiertas is null)
+@if (capacitacionesAbiertas == null || capacitacionesFuturas == null) 
 {
-    <p><em>Cargando capacitaciones abiertas...</em></p>
-}
-else if(!capacitacionesAbiertas.Any())
-{
-    <p>No hay capacitaciones abiertas en este momento.</p>
+    <p><em>Cargando capacitaciones abiertas y futuras...</em></p>
 }
 else
 {
     <h3>Capacitaciones Abiertas</h3>
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-        @foreach (var capacitacion in capacitacionesAbiertas)
-        {
-            <div class="col">
-                <CardCapacitacion Capacitacion="capacitacion" />
-            </div>
-        }
-    </div>
+    @if (!capacitacionesAbiertas.Any())
+    {
+        <p>No hay capacitaciones abiertas en este momento.</p>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            @foreach (var capacitaciones in capacitacionesAbiertas)
+            {
+                <div class="col">
+                    <CardCapacitacion Capacitacion="capacitaciones" />
+                </div>
+            }
+        </div>
+    }
+
+    <h3>Capacitaciones Próximas</h3>
+    @if (!capacitacionesFuturas.Any())
+    {
+        <p>No hay capacitaciones próximas programadas en este momento.</p>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            @foreach (var capacitaciones in capacitacionesFuturas)
+            {
+                <div class="col">
+                    <CardCapacitacion Capacitacion="capacitaciones" />
+                </div>
+            }
+        </div>
+    }
 }
+
 
 @code {
     private List<Capacitacion>? capacitacionesAbiertas;
+    private List<Capacitacion>? capacitacionesFuturas;
 
     protected override async Task OnInitializedAsync()
     {
-        capacitacionesAbiertas = (await _capacitacionService.GetCapacitacionesAbiertasAsync())?.ToList();
+        //cargamos capacitaciones abiertas y futuras en forma simultánea con Task.WhenAll
+        var capacitacionesAbiertasTask = _capacitacionService.GetCapacitacionesAbiertasAsync();
+        var capacitacionesFuturasTask = _capacitacionService.GetCapacitacionesFuturasAsync();
+        await Task.WhenAll(capacitacionesAbiertasTask, capacitacionesFuturasTask);
+        capacitacionesAbiertas = await capacitacionesAbiertasTask;
+        capacitacionesFuturas = await capacitacionesFuturasTask;
     }
 }
