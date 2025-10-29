@@ -114,14 +114,14 @@ namespace Desktop.Views
             // 
             // btnRestaurar
             // 
-            btnRestaurar.Location = new Point(707, 172);
+            btnRestaurar.Location = new Point(701, 232);
             btnRestaurar.Name = "btnRestaurar";
             btnRestaurar.Size = new Size(95, 28);
             btnRestaurar.TabIndex = 6;
             btnRestaurar.Text = "Restaurar";
             btnRestaurar.UseVisualStyleBackColor = true;
             btnRestaurar.Visible = false;
-            btnRestaurar.Click += btnRestaurar_Click;
+            btnRestaurar.Click += this.btnRestaurar_Click;
             // 
             // checkVerEliminados
             // 
@@ -132,7 +132,7 @@ namespace Desktop.Views
             checkVerEliminados.TabIndex = 1;
             checkVerEliminados.Text = "Ver Eliminados";
             checkVerEliminados.UseVisualStyleBackColor = true;
-            checkVerEliminados.CheckedChanged += checkVerEliminados_CheckedChanged;
+            checkVerEliminados.CheckedChanged += this.checkVerEliminados_CheckedChanged;
             // 
             // BtnBuscar
             // 
@@ -145,7 +145,7 @@ namespace Desktop.Views
             BtnBuscar.Size = new Size(101, 32);
             BtnBuscar.TabIndex = 2;
             BtnBuscar.Text = "Buscar";
-            BtnBuscar.Click += BtnBuscar_Click_1;
+            BtnBuscar.Click += this.BtnBuscar_Click_1;
             // 
             // TxtBuscar
             // 
@@ -154,7 +154,7 @@ namespace Desktop.Views
             TxtBuscar.Name = "TxtBuscar";
             TxtBuscar.Size = new Size(428, 23);
             TxtBuscar.TabIndex = 0;
-            TxtBuscar.TextChanged += TxtBuscar_TextChanged_1;
+            TxtBuscar.TextChanged += this.TxtBuscar_TextChanged_1;
             // 
             // label2
             // 
@@ -171,7 +171,7 @@ namespace Desktop.Views
             BtnSalir.IconChar = FontAwesome.Sharp.IconChar.None;
             BtnSalir.IconColor = Color.Black;
             BtnSalir.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            BtnSalir.Location = new Point(701, 228);
+            BtnSalir.Location = new Point(701, 332);
             BtnSalir.Margin = new Padding(2);
             BtnSalir.Name = "BtnSalir";
             BtnSalir.Size = new Size(117, 33);
@@ -192,7 +192,7 @@ namespace Desktop.Views
             GridCapacitaciones.ReadOnly = true;
             GridCapacitaciones.RowHeadersWidth = 62;
             GridCapacitaciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            GridCapacitaciones.Size = new Size(674, 218);
+            GridCapacitaciones.Size = new Size(674, 333);
             GridCapacitaciones.TabIndex = 7;
             // 
             // BtnEliminar
@@ -200,20 +200,20 @@ namespace Desktop.Views
             BtnEliminar.IconChar = FontAwesome.Sharp.IconChar.None;
             BtnEliminar.IconColor = Color.Black;
             BtnEliminar.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            BtnEliminar.Location = new Point(707, 135);
+            BtnEliminar.Location = new Point(701, 195);
             BtnEliminar.Margin = new Padding(2);
             BtnEliminar.Name = "BtnEliminar";
             BtnEliminar.Size = new Size(95, 32);
             BtnEliminar.TabIndex = 5;
             BtnEliminar.Text = "Eliminar";
-            BtnEliminar.Click += BtnEliminar_Click;
+            BtnEliminar.Click += this.BtnEliminar_Click;
             // 
             // BtnAgregar
             // 
             BtnAgregar.IconChar = FontAwesome.Sharp.IconChar.None;
             BtnAgregar.IconColor = Color.Black;
             BtnAgregar.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            BtnAgregar.Location = new Point(707, 66);
+            BtnAgregar.Location = new Point(701, 126);
             BtnAgregar.Margin = new Padding(2);
             BtnAgregar.Name = "BtnAgregar";
             BtnAgregar.Size = new Size(95, 31);
@@ -227,7 +227,7 @@ namespace Desktop.Views
             BtnModificar.IconColor = Color.Black;
             BtnModificar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtnModificar.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnModificar.Location = new Point(707, 101);
+            BtnModificar.Location = new Point(701, 161);
             BtnModificar.Margin = new Padding(2);
             BtnModificar.Name = "BtnModificar";
             BtnModificar.Size = new Size(95, 30);
@@ -235,7 +235,7 @@ namespace Desktop.Views
             BtnModificar.Text = "&Modificar";
             BtnModificar.TextAlign = ContentAlignment.MiddleRight;
             BtnModificar.UseVisualStyleBackColor = true;
-            BtnModificar.Click += BtnModificar_Click;
+            BtnModificar.Click += this.BtnModificar_Click;
             // 
             // TabPageAgregarEditar
             // 
@@ -276,7 +276,7 @@ namespace Desktop.Views
             BtnQuitar.TabIndex = 34;
             BtnQuitar.Text = "Quitar";
             BtnQuitar.UseVisualStyleBackColor = true;
-            BtnQuitar.Click += BtnQuitar_Click;
+            BtnQuitar.Click += this.BtnQuitar_Click;
             // 
             // BtnAnadir
             // 
@@ -286,7 +286,7 @@ namespace Desktop.Views
             BtnAnadir.TabIndex = 33;
             BtnAnadir.Text = "Añadir";
             BtnAnadir.UseVisualStyleBackColor = true;
-            BtnAnadir.Click += BtnAnadir_Click;
+            BtnAnadir.Click += this.BtnAnadir_Click;
             // 
             // numericCosto
             // 
@@ -452,7 +452,7 @@ namespace Desktop.Views
             BtnCancelar.Text = "&Cancelar";
             BtnCancelar.TextAlign = ContentAlignment.MiddleRight;
             BtnCancelar.UseVisualStyleBackColor = true;
-            BtnCancelar.Click += BtnCancelar_Click;
+            BtnCancelar.Click += this.BtnCancelar_Click;
             // 
             // BtnGuardar
             // 
@@ -469,7 +469,7 @@ namespace Desktop.Views
             BtnGuardar.Text = "&Guardar";
             BtnGuardar.TextAlign = ContentAlignment.MiddleRight;
             BtnGuardar.UseVisualStyleBackColor = true;
-            BtnGuardar.Click += BtnGuardar_Click;
+            BtnGuardar.Click += this.BtnGuardar_Click;
             // 
             // panel1
             // 
@@ -511,7 +511,7 @@ namespace Desktop.Views
             // TimerStatusBar
             // 
             TimerStatusBar.Interval = 5000;
-            TimerStatusBar.Tick += TimerStatusBar_Tick;
+            TimerStatusBar.Tick += this.TimerStatusBar_Tick;
             // 
             // CapacitacionesView
             // 
