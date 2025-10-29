@@ -83,6 +83,11 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
+            //controlamos que el email no esté repetido
+            if (_context.Usuarios.Any(u => u.Email == usuario.Email))
+            {
+                return Conflict("Error, existe un usuario ya registrado con ese mail.");
+            }
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
@@ -100,7 +105,7 @@ namespace Backend.Controllers
             }
             usuario.IsDeleted = true; // Soft delete
             usuario.DeleteDate = DateTime.Now;
-            _context.Usuarios.Remove(usuario);
+            _context.Usuarios.Update(usuario);
             await _context.SaveChangesAsync();
 
             return NoContent();
