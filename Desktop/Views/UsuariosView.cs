@@ -1,9 +1,11 @@
-﻿using System.Data;
-using System.Threading.Tasks;
-using Desktop.ExtensionMethod;
+﻿using Desktop.ExtensionMethod;
+using Firebase.Auth;
+using Firebase.Auth.Providers;
 using Service.Enums;
 using Service.Models;
 using Service.Services;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace Desktop.Views
 {
@@ -12,12 +14,28 @@ namespace Desktop.Views
         GenericService<Usuario> _usuarioService = new();
         Usuario _currentUsuario;
         List<Usuario>? _usuarios;
+        FirebaseAuthClient _firebaseAuthClient;
 
         public UsuariosView()
         {
             InitializeComponent();
             _ = GetAllData();
+            SettingFirebase();
             checkVerEliminados.CheckedChanged += DisplayHideControlsRestoreButton;
+        }
+
+        private void SettingFirebase()
+        {
+            var config = new FirebaseAuthConfig()
+            {
+                ApiKey = Service.Properties.Resources.ApiKeyFirebase,
+                AuthDomain = Service.Properties.Resources.AuthDomainFirebase,
+                Providers = new FirebaseAuthProvider[]
+                {
+                    new EmailProvider()
+                }
+            };
+            _firebaseAuthClient = new FirebaseAuthClient(config);
         }
 
         private void DisplayHideControlsRestoreButton(object? sender, EventArgs e)
@@ -45,6 +63,7 @@ namespace Desktop.Views
             GridUsuarios.DataSource = _usuarios;
             GridUsuarios.Columns["Id"].Visible = false; // Ocultar la columna Usuarios
             GridUsuarios.Columns["IsDeleted"].Visible = false; // Ocultar la columna Eliminado
+            GridUsuarios.Columns["DeleteDate"].Visible = false; // Ocultar la columna FechaEliminacion
             GetComboTiposDeUsuarios();
 
         }
@@ -116,6 +135,23 @@ namespace Desktop.Views
             {
                 var nuevoUsuario = await _usuarioService.AddAsync(usuarioAGuardar);
                 response = nuevoUsuario != null; //si es distinto de null es porque se guardo correctamente
+                if (response)
+                {
+                    // Crear cuenta en Firebase Authentication
+                    try
+                    {
+                        var user = await _firebaseAuthClient.CreateUserWithEmailAndPasswordAsync(
+                            usuarioAGuardar.Email,
+                            TxtPassword.Text.Trim(),
+                            nuevoUsuario.Nombre + "" + nuevoUsuario.Apellido);
+                        // Asignar una contraseña por defecto o generar una aleatoria
+               
+                    }
+                    catch (FirebaseAuthException ex)
+                    {
+                        MessageBox.Show($"Error al crear la cuenta en Firebase: {ex.Reason}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
             if (response)
             {

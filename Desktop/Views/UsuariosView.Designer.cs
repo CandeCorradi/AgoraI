@@ -60,6 +60,10 @@ namespace Desktop.Views
             statusStrip1 = new StatusStrip();
             LabelStatusMessage = new ToolStripStatusLabel();
             TimerStatusBar = new System.Windows.Forms.Timer(components);
+            TxtPassword = new TextBox();
+            label7 = new Label();
+            TxtVerifyPassword = new TextBox();
+            label9 = new Label();
             TabControl.SuspendLayout();
             TabPageLista.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)GridUsuarios).BeginInit();
@@ -208,6 +212,7 @@ namespace Desktop.Views
             BtnAgregar.Size = new Size(95, 31);
             BtnAgregar.TabIndex = 3;
             BtnAgregar.Text = "Agregar";
+            BtnAgregar.Click += BtnAgregar_Click;
             // 
             // BtnModificar
             // 
@@ -228,6 +233,10 @@ namespace Desktop.Views
             // 
             // TabPageAgregarEditar
             // 
+            TabPageAgregarEditar.Controls.Add(TxtVerifyPassword);
+            TabPageAgregarEditar.Controls.Add(label9);
+            TabPageAgregarEditar.Controls.Add(TxtPassword);
+            TabPageAgregarEditar.Controls.Add(label7);
             TabPageAgregarEditar.Controls.Add(TxtEmail);
             TabPageAgregarEditar.Controls.Add(CmbTiposDeUsuarios);
             TabPageAgregarEditar.Controls.Add(label8);
@@ -260,9 +269,9 @@ namespace Desktop.Views
             // CmbTiposDeUsuarios
             // 
             CmbTiposDeUsuarios.FormattingEnabled = true;
-            CmbTiposDeUsuarios.Location = new Point(153, 173);
+            CmbTiposDeUsuarios.Location = new Point(152, 238);
             CmbTiposDeUsuarios.Name = "CmbTiposDeUsuarios";
-            CmbTiposDeUsuarios.Size = new Size(627, 23);
+            CmbTiposDeUsuarios.Size = new Size(162, 23);
             CmbTiposDeUsuarios.TabIndex = 31;
             // 
             // label8
@@ -286,7 +295,7 @@ namespace Desktop.Views
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(56, 173);
+            label6.Location = new Point(55, 238);
             label6.Margin = new Padding(2, 0, 2, 0);
             label6.Name = "label6";
             label6.Size = new Size(92, 15);
@@ -415,6 +424,44 @@ namespace Desktop.Views
             TimerStatusBar.Interval = 5000;
             TimerStatusBar.Tick += TimerStatusBar_Tick;
             // 
+            // TxtPassword
+            // 
+            TxtPassword.Location = new Point(152, 170);
+            TxtPassword.Margin = new Padding(2);
+            TxtPassword.Name = "TxtPassword";
+            TxtPassword.PasswordChar = '•';
+            TxtPassword.Size = new Size(628, 23);
+            TxtPassword.TabIndex = 37;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(77, 173);
+            label7.Margin = new Padding(2, 0, 2, 0);
+            label7.Name = "label7";
+            label7.Size = new Size(70, 15);
+            label7.TabIndex = 36;
+            label7.Text = "Contraseña:";
+            // 
+            // TxtVerifyPassword
+            // 
+            TxtVerifyPassword.Location = new Point(152, 199);
+            TxtVerifyPassword.Margin = new Padding(2);
+            TxtVerifyPassword.Name = "TxtVerifyPassword";
+            TxtVerifyPassword.PasswordChar = '•';
+            TxtVerifyPassword.Size = new Size(628, 23);
+            TxtVerifyPassword.TabIndex = 39;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(39, 202);
+            label9.Margin = new Padding(2, 0, 2, 0);
+            label9.Name = "label9";
+            label9.Size = new Size(108, 15);
+            label9.TabIndex = 38;
+            label9.Text = "Repetir contraseña:";
+            // 
             // UsuariosView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -474,5 +521,8 @@ namespace Desktop.Views
         private Label label7;
         private Button BtnQuitar;
         private TextBox TxtEmail;
+        private TextBox TxtVerifyPassword;
+        private Label label9;
+        private TextBox TxtPassword;
     }
 }
