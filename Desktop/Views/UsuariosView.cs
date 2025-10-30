@@ -5,6 +5,7 @@ using Service.Enums;
 using Service.Models;
 using Service.Services;
 using System.Data;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Desktop.Views
@@ -103,7 +104,13 @@ namespace Desktop.Views
             TxtDni.Clear();
             TxtApellido.Clear();
             TxtEmail.Clear();
+            TxtPassword.Clear();
+            TxtVerifyPassword.Clear();
             GetComboTiposDeUsuarios();
+            LblPassword.Text = "Contraseña:";
+            LblRepeatPassword.Text = "Repetir Contraseña:";
+            TxtPassword.PlaceholderText = "Mínimo 6 caracteres";
+            TxtVerifyPassword.PlaceholderText = "Mínimo 6 caracteres";
         }
 
         private void BtnCancelar_Click(object sender, EventArgs e)
@@ -114,59 +121,151 @@ namespace Desktop.Views
 
         private async void BtnGuardar_Click(object sender, EventArgs e)
         {
-            Usuario usuarioAGuardar = new Usuario
+            if (!DataControl())
+                return;
+            Usuario usuarioAGuardar = GetUserDataFromScreen();
+            bool responseSuccessfull = false;
+            if (_currentUsuario != null)//modificando un usuario existente
+            {
+                try
+                {
+                    responseSuccessfull = await _usuarioService.UpdateAsync(usuarioAGuardar);
+                    if (responseSuccessfull && !string.IsNullOrWhiteSpace(TxtPassword.Text))
+                        await UpdatePasswordInFirebase(usuarioAGuardar);// Actualizar pass en Firebase
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al actualizar el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+            }
+
+            if (_currentUsuario == null)//agregando un nuevo usuario
+            {
+                var nuevoUsuario = await _usuarioService.AddAsync(usuarioAGuardar);
+                responseSuccessfull = nuevoUsuario != null;
+                if (responseSuccessfull)
+                    await CreateUserInFirebase(nuevoUsuario);// Crear el usuario en Firebase Authentication
+            }
+
+            if (!responseSuccessfull)
+            {
+                MessageBox.Show("Error al guardar el usuario", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            _currentUsuario = null; // Reset the modified movie after saving
+            LabelStatusMessage.Text = $"Usuario {usuarioAGuardar.Nombre} guardado correctamente";
+            TimerStatusBar.Start(); // Iniciar el temporizador para mostrar el mensaje en la barra de estado
+            await GetAllData();
+            LimpiarControlesAgregarEditar();
+            TabControl.SelectedTab = TabPageLista;
+
+        }
+
+        private async Task CreateUserInFirebase(Usuario? nuevoUsuario)
+        {
+            try
+            {
+                var userCredential = await _firebaseAuthClient.CreateUserWithEmailAndPasswordAsync(
+                    nuevoUsuario.Email,
+                    TxtPassword.Text.Trim(),
+                    nuevoUsuario.Nombre + " " + nuevoUsuario.Apellido// Contraseña por defecto, se recomienda cambiarla luego
+                );
+                await SendVerificationEmailAsync(userCredential.User.GetIdTokenAsync().Result); // Enviar correo de verificación
+            }
+            catch (FirebaseAuthException ex)
+            {
+                MessageBox.Show($"Error al crear el usuario en Firebase: {ex.Reason}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async Task UpdatePasswordInFirebase(Usuario usuarioAGuardar)
+        {
+            try
+            {
+                var userCredential = await _firebaseAuthClient.SignInWithEmailAndPasswordAsync(
+                    usuarioAGuardar.Email,
+                    TxtPassword.Text.Trim()
+                );
+                await userCredential.User.ChangePasswordAsync(TxtVerifyPassword.Text.Trim());
+
+
+            }
+            catch (FirebaseAuthException ex)
+            {
+                MessageBox.Show($"Error al actualizar la contraseña en Firebase: {ex.Reason}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private Usuario GetUserDataFromScreen()
+        {
+            return new Usuario
             {
                 Id = _currentUsuario?.Id ?? 0,
                 Nombre = TxtNombre.Text,
                 Apellido = TxtApellido.Text,
                 Dni = TxtDni.Text,
                 Email = TxtEmail.Text,
-                TipoUsuario = (TipoUsuarioEnum)(CmbTiposDeUsuarios.SelectedItem?? TipoUsuarioEnum.Asistente) 
-                //operador de coalescencia nula por si no hay nada seleccionado en el combo, asigna asistente por defecto
+                TipoUsuario = (TipoUsuarioEnum)(CmbTiposDeUsuarios.SelectedItem ?? TipoUsuarioEnum.Asistente)
+                //operador de coalescencia nula por si no hay nada seleccionado en el combo, asigna Asistente por defecto
             };
-
-
-            bool response = false;
-            if (_currentUsuario != null)
-            {
-                response = await _usuarioService.UpdateAsync(usuarioAGuardar);
-            }
-            else
-            {
-                var nuevoUsuario = await _usuarioService.AddAsync(usuarioAGuardar);
-                response = nuevoUsuario != null; //si es distinto de null es porque se guardo correctamente
-                if (response)
-                {
-                    // Crear cuenta en Firebase Authentication
-                    try
-                    {
-                        var user = await _firebaseAuthClient.CreateUserWithEmailAndPasswordAsync(
-                            usuarioAGuardar.Email,
-                            TxtPassword.Text.Trim(),
-                            nuevoUsuario.Nombre + "" + nuevoUsuario.Apellido);
-                        // Asignar una contraseña por defecto o generar una aleatoria
-               
-                    }
-                    catch (FirebaseAuthException ex)
-                    {
-                        MessageBox.Show($"Error al crear la cuenta en Firebase: {ex.Reason}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            if (response)
-            {
-                _currentUsuario = null; // Reset the modified movie after saving
-                LabelStatusMessage.Text = $"Usuario {usuarioAGuardar.Nombre} guardado correctamente";
-                TimerStatusBar.Start(); // Iniciar el temporizador para mostrar el mensaje en la barra de estado
-                await GetAllData();
-                LimpiarControlesAgregarEditar();
-                TabControl.SelectedTab = TabPageLista;
-            }
-            else
-            {
-                MessageBox.Show("Error al guardar el usuario", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
+       
+
+        private bool DataControl()
+        {
+            // Validaciones simples
+            if (string.IsNullOrWhiteSpace(TxtNombre.Text))
+            {
+                MessageBox.Show("El nombre no puede estar vacío", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(TxtApellido.Text))
+            {
+                MessageBox.Show("El apellido no puede estar vacío", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(TxtDni.Text))
+            {
+                MessageBox.Show("El DNI no puede estar vacío", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(TxtEmail.Text))
+            {
+                MessageBox.Show("El email no puede estar vacío", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (_currentUsuario == null && (TxtPassword.Text != TxtVerifyPassword.Text))
+            {
+                MessageBox.Show("Las contraseñas ingresadas no coinciden", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (_currentUsuario == null && (string.IsNullOrWhiteSpace(TxtPassword.Text) || string.IsNullOrWhiteSpace(TxtVerifyPassword.Text)))
+            {
+                MessageBox.Show("Debe completar el campo contraseña y verificación", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (_currentUsuario != null && (string.IsNullOrWhiteSpace(TxtPassword.Text) && string.IsNullOrWhiteSpace(TxtVerifyPassword.Text))) //modificacion que no cambia la contraseña
+            {
+                return true;
+            }
+
+            if (_currentUsuario != null && (string.IsNullOrWhiteSpace(TxtPassword.Text) || string.IsNullOrWhiteSpace(TxtVerifyPassword.Text)))
+            {
+                MessageBox.Show("Para modificar la contraseña debe completar la contraseña anterior y nueva", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if ((TxtPassword.Text.Length < 6) || (TxtVerifyPassword.Text.Length < 6))
+            {
+                MessageBox.Show("Las contraseñas deben tener al menos 6 caracteres", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
+        }
+
 
         private void BtnModificar_Click(object sender, EventArgs e)
         {
@@ -180,7 +279,10 @@ namespace Desktop.Views
                 TxtEmail.Text = _currentUsuario.Email;
                 CmbTiposDeUsuarios.SelectedItem = _currentUsuario.TipoUsuario;
 
-
+                LblPassword.Text = "Contraseña anterior:";
+                LblRepeatPassword.Text = "Nueva contraseña:";
+                TxtPassword.PlaceholderText = "Dejar en blanco para no modificar";
+                TxtVerifyPassword.PlaceholderText = "Dejar en blanco para no modificar";
                 TabControl.SelectedTab = TabPageAgregarEditar;
             }
             else
@@ -270,7 +372,22 @@ namespace Desktop.Views
 
         private void TxtBuscar_TextChanged_1(object sender, EventArgs e)
         {
-            
+
+        }
+        public async Task SendVerificationEmailAsync(string idToken)
+        {
+            var FirebaseApiKey = Service.Properties.Resources.ApiKeyFirebase;
+            var RequestUri = "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + FirebaseApiKey; using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var content = new StringContent("{\"requestType\":\"VERIFY_EMAIL\",\"idToken\":\"" + idToken + "\"}");
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var response = await client.PostAsync(RequestUri, content);
+                response.EnsureSuccessStatusCode();
+            }
         }
     }
+
 }
