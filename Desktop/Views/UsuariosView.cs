@@ -51,21 +51,36 @@ namespace Desktop.Views
         }
 
         private async Task GetAllData()
+            
         {
-            if (checkVerEliminados.Checked)
+            try
             {
-                _usuarios = await _usuarioService.GetAllDeletedsAsync("");
+
+
+                if (checkVerEliminados.Checked)
+                {
+                    _usuarios = await _usuarioService.GetAllDeletedsAsync("");
+                }
+
+                else
+                {
+                    _usuarios = await _usuarioService.GetAllAsync();
+
+
+                    GridUsuarios.DataSource = _usuarios;
+                    GridUsuarios.Columns["Id"].Visible = false; // Ocultar la columna Usuarios
+                    GridUsuarios.Columns["IsDeleted"].Visible = false; // Ocultar la columna Eliminado
+                    GridUsuarios.Columns["DeleteDate"].Visible = false; // Ocultar la columna FechaEliminacion
+                    GetComboTiposDeUsuarios();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener los usuarios: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
-            else
-            {
-                _usuarios = await _usuarioService.GetAllAsync();
-            }
-            GridUsuarios.DataSource = _usuarios;
-            GridUsuarios.Columns["Id"].Visible = false; // Ocultar la columna Usuarios
-            GridUsuarios.Columns["IsDeleted"].Visible = false; // Ocultar la columna Eliminado
-            GridUsuarios.Columns["DeleteDate"].Visible = false; // Ocultar la columna FechaEliminacion
-            GetComboTiposDeUsuarios();
+            
 
         }
 
