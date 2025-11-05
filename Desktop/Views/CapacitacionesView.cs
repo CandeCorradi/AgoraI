@@ -10,7 +10,7 @@ namespace Desktop.Views
     {
         GenericService<Capacitacion> _capacitacionService = new();
         GenericService<TipoInscripcion> _tipoInscripcionService = new();
-        Capacitacion _currentCapacitacion;
+        Capacitacion? _currentCapacitacion;
         List<Capacitacion>? _capacitaciones;
 
         public CapacitacionesView()
@@ -72,11 +72,7 @@ namespace Desktop.Views
         }
 
 
-        private void BtnAgregar_Click(object sender, EventArgs e)
-        {
-            LimpiarControlesAgregarEditar();
-            TabControl.SelectedTab = TabPageAgregarEditar;
-        }
+       
 
         private void LimpiarControlesAgregarEditar()
         {
@@ -97,36 +93,44 @@ namespace Desktop.Views
 
         private async void BtnGuardar_Click(object sender, EventArgs e)
         {
-            Capacitacion capacitacionAGuardar = new Capacitacion
-            {
-                Id = _currentCapacitacion?.Id ?? 0,
-                Nombre = TxtNombre.Text,
-                Detalle = TxtDetalle.Text,
-                Ponente = TxtPonente.Text,
-                FechaHora = dateTimeFechaHora.Value,
-                Cupo = (int)numericCupo.Value, // int - conversion de tipos (typecast) para igualarlo y que se pueda asignar en el campo
-                InscripcionAbierta = checkInscripcionAbierta.Checked
-            };
+
+            _currentCapacitacion.Nombre = TxtNombre.Text;
+            _currentCapacitacion.Detalle = TxtDetalle.Text;
+            _currentCapacitacion.Ponente = TxtPonente.Text;
+            _currentCapacitacion.FechaHora = dateTimeFechaHora.Value;
+            _currentCapacitacion.Cupo = (int)numericCupo.Value; // int - conversion de tipos (typecast) para igualarlo y que se pueda asignar en el campo
+            _currentCapacitacion.InscripcionAbierta = checkInscripcionAbierta.Checked;
 
 
-            bool response = false;
-            if (_currentCapacitacion != null)
+
+            bool successfull = false;
+            try
             {
-                response = await _capacitacionService.UpdateAsync(capacitacionAGuardar);
+                if (_currentCapacitacion.Id == 0) //si es mayor a 0 es porque ya existe y hay que modificar
+                {
+                    var nuevaCapacitacion = await _capacitacionService.AddAsync(_currentCapacitacion);
+                    successfull = nuevaCapacitacion != null; //si es distinto de null es porque se guardo correctamente
+
+                }
+                if (_currentCapacitacion.Id > 0) //modificar capacitacion existente
+                {
+                    successfull = await _capacitacionService.UpdateAsync(_currentCapacitacion);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var nuevaCapacitacion = await _capacitacionService.AddAsync(capacitacionAGuardar);
-                response = nuevaCapacitacion != null; //si es distinto de null es porque se guardo correctamente
+                MessageBox.Show($"Error al guardar la capacitación: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            if (response)
+            if (successfull)
             {
-                _currentCapacitacion = null; // Reset the modified movie after saving
-                LabelStatusMessage.Text = $"Capacitación {capacitacionAGuardar.Nombre} guardada correctamente";
+                LabelStatusMessage.Text = $"Capacitación {_currentCapacitacion.Nombre} guardada correctamente";
                 TimerStatusBar.Start(); // Iniciar el temporizador para mostrar el mensaje en la barra de estado
                 await GetAllData();
                 LimpiarControlesAgregarEditar();
                 TabControl.SelectedTab = TabPageLista;
+                _currentCapacitacion = null; // Reset the modified movie after saving
+
             }
             else
             {
@@ -252,14 +256,13 @@ namespace Desktop.Views
                 TipoInscripcionId = (int)CmbTiposInscripciones.SelectedValue,
                 TipoInscripcion = (TipoInscripcion)CmbTiposInscripciones.SelectedItem,
                 CapacitacionId = _currentCapacitacion?.Id ?? 0,
-                Capacitacion = _currentCapacitacion,
                 Costo = numericCosto.Value
 
             };
-            _currentCapacitacion?.TiposDeInscripciones.Add(tipoInscripcionCapacitacion);
-            GridTiposDeInscripciones.DataSource = null;
+            _currentCapacitacion?.TiposDeInscripciones?.Add(tipoInscripcionCapacitacion);
+            GridTiposDeInscripciones.DataSource = _currentCapacitacion?.TiposDeInscripciones?.ToList();
             GridTiposDeInscripciones.HideColumns("Id", "CapacitacionId", "Capacitacion", "TipoInscripcionId", "IsDeleted");//oculta columnas en la grilla
-            
+
             //mostramos la colunma como moneda con 2 decimales
             GridTiposDeInscripciones.Columns["Costo"].DefaultCellStyle.Format = "C2";
         }
@@ -269,6 +272,13 @@ namespace Desktop.Views
             var tipoInscripcionCapacitacionSeleccionada = (TipoInscripcionCapacitacion)GridTiposDeInscripciones.SelectedRows[0].DataBoundItem;
             _currentCapacitacion?.TiposDeInscripciones.Remove(tipoInscripcionCapacitacionSeleccionada);
             GridTiposDeInscripciones.DataSource = _currentCapacitacion?.TiposDeInscripciones.ToList();
+        }
+
+        private void BtnAgregar_Click_1(object sender, EventArgs e)
+        {
+            LimpiarControlesAgregarEditar();
+            _currentCapacitacion = new Capacitacion();
+            TabControl.SelectedTab = TabPageAgregarEditar;
         }
     }
 }

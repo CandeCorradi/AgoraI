@@ -219,6 +219,7 @@ namespace Desktop.Views
             BtnAgregar.Size = new Size(95, 31);
             BtnAgregar.TabIndex = 3;
             BtnAgregar.Text = "Agregar";
+            BtnAgregar.Click += BtnAgregar_Click_1;
             // 
             // BtnModificar
             // 

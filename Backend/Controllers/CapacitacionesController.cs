@@ -89,14 +89,51 @@ namespace Backend.Controllers
             {
                 return BadRequest();
             }
+            //attach = atachamos las entidades de tipo inscripcion para que no intente crearlas de nuevo
+            foreach (var tipoInscripcionCapacitacion in capacitacion.TiposDeInscripciones)
+            {
+                _context.Attach(tipoInscripcionCapacitacion.TipoInscripcion);
+            }
 
-            _context.Entry(capacitacion).State = EntityState.Modified;
+            var capacitacionExistente = await _context.Capacitaciones
+                                                      .AsNoTracking() //para NO almacenar datos en el contexto
+                                                      .Include(c => c.TiposDeInscripciones)
+                                                      .FirstOrDefaultAsync(c => c.Id == capacitacion.Id);
+            if (capacitacionExistente == null)
+            {
+                return NotFound("No se encontro la capacitación que se intenta modificar.");
+            }
+
+            var tipoInscripcionesAEliminar = capacitacionExistente.TiposDeInscripciones
+                                                                  .Where(t => !capacitacion.TiposDeInscripciones
+                                                                  .Any(ti => ti.Id == t.Id))
+                                                                  .ToList();
+            
+            foreach (var tipoInscripcionCapacitacion in tipoInscripcionesAEliminar)
+            {
+                _context.TiposInscripcionesCapacitaciones.Remove(tipoInscripcionCapacitacion);
+            }
+
+            var tipoInscripcionAgregar = capacitacion.TiposDeInscripciones
+                                                            .Where(ti => !capacitacionExistente.TiposDeInscripciones
+                                                            .Any(t => t.Id == ti.Id))
+                                                            .ToList();
+            foreach (var tipoInscripcionCapacitacion in tipoInscripcionAgregar)
+            {
+                _context.Attach(tipoInscripcionCapacitacion.TipoInscripcion);
+                _context.TiposInscripcionesCapacitaciones.Add(tipoInscripcionCapacitacion);
+            }
+
+
+                _context.Entry(capacitacion).State = EntityState.Modified;
+            //entry = le dice al contexto que la entidad capacitacion fue modificada 
+            //context tiene una copia gigante de copia de datos
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException e)
             {
                 if (!CapacitacionExists(id))
                 {
@@ -104,7 +141,7 @@ namespace Backend.Controllers
                 }
                 else
                 {
-                    throw;
+                    throw new Exception(e.Message);
                 }
             }
 
@@ -116,6 +153,13 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Capacitacion>> PostCapacitacion(Capacitacion capacitacion)
         {
+            foreach (var tipoInscripcionCapacitacion in capacitacion.TiposDeInscripciones)
+            {
+                _context.Attach(tipoInscripcionCapacitacion.TipoInscripcion);
+                //attach es para decir que no se cree un nuevo registro de TipoInscripcion porque ya existe
+            }
+
+
             _context.Capacitaciones.Add(capacitacion);
             await _context.SaveChangesAsync();
 
