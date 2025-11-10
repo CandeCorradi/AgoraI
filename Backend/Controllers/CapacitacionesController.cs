@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.DataContext;
 using Service.Models;
+using Backend.ExtensionMethod;
 
 namespace Backend.Controllers
 {
@@ -92,7 +93,7 @@ namespace Backend.Controllers
             //attach = atachamos las entidades de tipo inscripcion para que no intente crearlas de nuevo
             foreach (var tipoInscripcionCapacitacion in capacitacion.TiposDeInscripciones)
             {
-                _context.Attach(tipoInscripcionCapacitacion.TipoInscripcion);
+                _context.TryAttach(tipoInscripcionCapacitacion.TipoInscripcion);
             }
 
             var capacitacionExistente = await _context.Capacitaciones
@@ -111,6 +112,8 @@ namespace Backend.Controllers
             
             foreach (var tipoInscripcionCapacitacion in tipoInscripcionesAEliminar)
             {
+                _context.TryAttach(tipoInscripcionCapacitacion.TipoInscripcion);
+                tipoInscripcionCapacitacion.Capacitacion = null;
                 _context.TiposInscripcionesCapacitaciones.Remove(tipoInscripcionCapacitacion);
             }
 
@@ -120,7 +123,7 @@ namespace Backend.Controllers
                                                             .ToList();
             foreach (var tipoInscripcionCapacitacion in tipoInscripcionAgregar)
             {
-                _context.Attach(tipoInscripcionCapacitacion.TipoInscripcion);
+                _context.TryAttach(tipoInscripcionCapacitacion.TipoInscripcion);
                 _context.TiposInscripcionesCapacitaciones.Add(tipoInscripcionCapacitacion);
             }
 

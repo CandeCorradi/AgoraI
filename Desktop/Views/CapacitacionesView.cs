@@ -66,13 +66,10 @@ namespace Desktop.Views
         }
 
 
-        private void BtnSalir_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        
 
 
-       
+
 
         private void LimpiarControlesAgregarEditar()
         {
@@ -279,6 +276,11 @@ namespace Desktop.Views
             LimpiarControlesAgregarEditar();
             _currentCapacitacion = new Capacitacion();
             TabControl.SelectedTab = TabPageAgregarEditar;
+        }
+
+        private void BtnSalir_Click_1(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

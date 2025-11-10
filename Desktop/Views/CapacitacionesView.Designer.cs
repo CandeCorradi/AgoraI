@@ -177,6 +177,7 @@ namespace Desktop.Views
             BtnSalir.Size = new Size(117, 33);
             BtnSalir.TabIndex = 7;
             BtnSalir.Text = "Salir";
+            BtnSalir.Click += BtnSalir_Click_1;
             // 
             // GridCapacitaciones
             // 
