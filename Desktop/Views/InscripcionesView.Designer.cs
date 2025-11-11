@@ -31,6 +31,10 @@
             label1 = new Label();
             panel1 = new Panel();
             AddInscripcion = new Panel();
+            label5 = new Label();
+            TxtCosto = new TextBox();
+            label4 = new Label();
+            CmbTipoInscripcion = new ComboBox();
             BtnAgregarUsuario = new Button();
             BtnBuscar = new Button();
             TxtBuscarUsuarios = new TextBox();
@@ -40,8 +44,6 @@
             GridInscripciones = new DataGridView();
             CmbCapacitacion = new ComboBox();
             label2 = new Label();
-            CmbTipoInscripcion = new ComboBox();
-            label4 = new Label();
             panel1.SuspendLayout();
             AddInscripcion.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)GridUsuarios).BeginInit();
@@ -67,12 +69,14 @@
             panel1.Location = new Point(0, 11);
             panel1.Margin = new Padding(2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1061, 47);
+            panel1.Size = new Size(928, 47);
             panel1.TabIndex = 8;
             // 
             // AddInscripcion
             // 
             AddInscripcion.BorderStyle = BorderStyle.Fixed3D;
+            AddInscripcion.Controls.Add(label5);
+            AddInscripcion.Controls.Add(TxtCosto);
             AddInscripcion.Controls.Add(label4);
             AddInscripcion.Controls.Add(CmbTipoInscripcion);
             AddInscripcion.Controls.Add(BtnAgregarUsuario);
@@ -82,8 +86,43 @@
             AddInscripcion.Controls.Add(label3);
             AddInscripcion.Location = new Point(506, 73);
             AddInscripcion.Name = "AddInscripcion";
-            AddInscripcion.Size = new Size(543, 347);
+            AddInscripcion.Size = new Size(412, 347);
             AddInscripcion.TabIndex = 13;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(16, 255);
+            label5.Name = "label5";
+            label5.Size = new Size(52, 15);
+            label5.TabIndex = 20;
+            label5.Text = "Importe:";
+            // 
+            // TxtCosto
+            // 
+            TxtCosto.Enabled = false;
+            TxtCosto.Location = new Point(16, 273);
+            TxtCosto.Name = "TxtCosto";
+            TxtCosto.ReadOnly = true;
+            TxtCosto.Size = new Size(100, 23);
+            TxtCosto.TabIndex = 19;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(6, 196);
+            label4.Name = "label4";
+            label4.Size = new Size(110, 15);
+            label4.TabIndex = 16;
+            label4.Text = "Tipo de Inscripción:";
+            // 
+            // CmbTipoInscripcion
+            // 
+            CmbTipoInscripcion.FormattingEnabled = true;
+            CmbTipoInscripcion.Location = new Point(5, 217);
+            CmbTipoInscripcion.Name = "CmbTipoInscripcion";
+            CmbTipoInscripcion.Size = new Size(392, 23);
+            CmbTipoInscripcion.TabIndex = 15;
             // 
             // BtnAgregarUsuario
             // 
@@ -93,6 +132,7 @@
             BtnAgregarUsuario.TabIndex = 14;
             BtnAgregarUsuario.Text = "Agregar Inscripto...";
             BtnAgregarUsuario.UseVisualStyleBackColor = true;
+            BtnAgregarUsuario.Click += BtnAgregarUsuario_Click;
             // 
             // BtnBuscar
             // 
@@ -124,7 +164,7 @@
             GridUsuarios.ReadOnly = true;
             GridUsuarios.RowHeadersVisible = false;
             GridUsuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            GridUsuarios.Size = new Size(531, 118);
+            GridUsuarios.Size = new Size(392, 118);
             GridUsuarios.TabIndex = 11;
             // 
             // label3
@@ -180,28 +220,11 @@
             label2.TabIndex = 13;
             label2.Text = "Capacitación:";
             // 
-            // CmbTipoInscripcion
-            // 
-            CmbTipoInscripcion.FormattingEnabled = true;
-            CmbTipoInscripcion.Location = new Point(5, 217);
-            CmbTipoInscripcion.Name = "CmbTipoInscripcion";
-            CmbTipoInscripcion.Size = new Size(280, 23);
-            CmbTipoInscripcion.TabIndex = 15;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(6, 196);
-            label4.Name = "label4";
-            label4.Size = new Size(110, 15);
-            label4.TabIndex = 16;
-            label4.Text = "Tipo de Inscripción:";
-            // 
             // InscripcionesView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1061, 450);
+            ClientSize = new Size(928, 450);
             Controls.Add(panel2);
             Controls.Add(AddInscripcion);
             Controls.Add(panel1);
@@ -235,5 +258,7 @@
         private Label label2;
         private Label label4;
         private ComboBox CmbTipoInscripcion;
+        private Label label5;
+        private TextBox TxtCosto;
     }
 }

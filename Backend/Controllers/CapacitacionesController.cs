@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Backend.DataContext;
+using Backend.ExtensionMethod;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Backend.DataContext;
 using Service.Models;
-using Backend.ExtensionMethod;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Backend.Controllers
 {
@@ -24,47 +24,58 @@ namespace Backend.Controllers
 
         // GET: api/Capacitaciones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Capacitacion>>> GetCapacitaciones([FromQuery] string? filter="")
+        public async Task<ActionResult<IEnumerable<Capacitacion>>> GetCapacitaciones([FromQuery] string? filter = "")
         {
             return await _context.Capacitaciones
-                .AsNoTracking().Include(c=> c.TiposDeInscripciones).ThenInclude(t=>t.TipoInscripcion)
-                .Where(c => c.Nombre.Contains(filter, StringComparison.OrdinalIgnoreCase)
-                        || c.Detalle.Contains(filter, StringComparison.OrdinalIgnoreCase)
-                        || c.Ponente.Contains(filter, StringComparison.OrdinalIgnoreCase))
-                .ToListAsync();
+                            .Include(c => c.TiposDeInscripciones).ThenInclude(t => t.TipoInscripcion)
+                            .Include(c => c.Inscripciones).ThenInclude(i => i.Usuario)
+                            .Include(c => c.Inscripciones).ThenInclude(i => i.UsuarioCobro)
+                            .Include(c => c.Inscripciones).ThenInclude(i => i.TipoInscripcion)
+                            .Where(c => c.Nombre.Contains(filter, StringComparison.OrdinalIgnoreCase)
+                                || c.Detalle.Contains(filter, StringComparison.OrdinalIgnoreCase)
+                                || c.Ponente.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                            .AsNoTracking()
+                            .ToListAsync();
         }
 
-
-        [HttpGet("abiertas/")]
-        public async Task<ActionResult<IEnumerable<Capacitacion>>> GetCapacitacionesAbiertas ([FromQuery] string? filter = "")
+        [HttpGet("abiertas")]
+        public async Task<ActionResult<IEnumerable<Capacitacion>>> GetCapacitacionesAbiertas([FromQuery] string? filter = "")
         {
             return await _context.Capacitaciones
-                .AsNoTracking().Include(c => c.TiposDeInscripciones).ThenInclude(t => t.TipoInscripcion)
-                .Where(c => !c.InscripcionAbierta &&(c.Nombre.Contains(filter) 
-                    || c.Detalle.Contains(filter) 
-                    || c.Ponente.Contains(filter)))
-                .ToListAsync();
+                                .Include(c => c.TiposDeInscripciones).ThenInclude(t => t.TipoInscripcion)
+                                .Include(c => c.Inscripciones).ThenInclude(i => i.Usuario)
+                                .Include(c => c.Inscripciones).ThenInclude(i => i.UsuarioCobro)
+                                .Include(c => c.Inscripciones).ThenInclude(i => i.TipoInscripcion)
+                                .Where(c => c.InscripcionAbierta &&
+                                        (c.Nombre.Contains(filter)
+                                            || c.Detalle.Contains(filter)
+                                            || c.Ponente.Contains(filter)))
+                                .AsNoTracking()
+                                .ToListAsync();
         }
-
-        [HttpGet("futuras/")]
+        [HttpGet("futuras")]
         public async Task<ActionResult<IEnumerable<Capacitacion>>> GetCapacitacionesFuturas([FromQuery] string? filter = "")
         {
             return await _context.Capacitaciones
-                .AsNoTracking().Include(c => c.TiposDeInscripciones).ThenInclude(t => t.TipoInscripcion)
-                .Where(c => !c.InscripcionAbierta 
-                          && c.FechaHora.Date > DateTime.Now.Date 
-                         && (c.Nombre.Contains(filter) 
-                              || c.Detalle.Contains(filter) 
-                              || c.Ponente.Contains(filter)))
-                .ToListAsync();
+                                .Include(c => c.TiposDeInscripciones).ThenInclude(t => t.TipoInscripcion)
+                                .Include(c => c.Inscripciones).ThenInclude(i => i.Usuario)
+                                .Include(c => c.Inscripciones).ThenInclude(i => i.UsuarioCobro)
+                                .Include(c => c.Inscripciones).ThenInclude(i => i.TipoInscripcion)
+                                .Where(c => !c.InscripcionAbierta
+                                        && c.FechaHora.Date > DateTime.Now.Date
+                                        && (c.Nombre.Contains(filter)
+                                            || c.Detalle.Contains(filter)
+                                            || c.Ponente.Contains(filter)))
+                                .AsNoTracking()
+                                .ToListAsync();
         }
 
         // GET: api/Capacitaciones
         [HttpGet("deleteds/")]
         public async Task<ActionResult<IEnumerable<Capacitacion>>> GetCapacitacionesDeleteds()
         {
-            return await _context.Capacitaciones.
-                IgnoreQueryFilters().Where(c=>c.IsDeleted).ToListAsync();
+            return await _context.Capacitaciones.AsNoTracking()
+                                .IgnoreQueryFilters().Where(c => c.IsDeleted).ToListAsync();
         }
 
         // GET: api/Capacitaciones/5
@@ -90,47 +101,87 @@ namespace Backend.Controllers
             {
                 return BadRequest();
             }
-            //attach = atachamos las entidades de tipo inscripcion para que no intente crearlas de nuevo
+            _context.Entry(capacitacion).State = EntityState.Modified;
+
+            #region Manejo de ICollection TiposDeInscripciones
+            // Attach las entidades TipoInscripcion para que no intente guardarlas nuevamente
             foreach (var tipoInscripcionCapacitacion in capacitacion.TiposDeInscripciones)
             {
                 _context.TryAttach(tipoInscripcionCapacitacion.TipoInscripcion);
             }
 
             var capacitacionExistente = await _context.Capacitaciones
-                                                      .AsNoTracking() //para NO almacenar datos en el contexto
-                                                      .Include(c => c.TiposDeInscripciones)
-                                                      .FirstOrDefaultAsync(c => c.Id == capacitacion.Id);
+                                                .Include(c => c.TiposDeInscripciones)
+                                                .Include(c => c.Inscripciones)
+                                                .AsNoTracking()
+                                                .FirstOrDefaultAsync(c => c.Id == capacitacion.Id);
             if (capacitacionExistente == null)
             {
-                return NotFound("No se encontro la capacitación que se intenta modificar.");
+                return NotFound("No se encontró la capacitación que se intentaba modificar");
             }
-
-            var tipoInscripcionesAEliminar = capacitacionExistente.TiposDeInscripciones
-                                                                  .Where(t => !capacitacion.TiposDeInscripciones
-                                                                  .Any(ti => ti.Id == t.Id))
-                                                                  .ToList();
-            
-            foreach (var tipoInscripcionCapacitacion in tipoInscripcionesAEliminar)
+            var tipodeInscripcionesAEliminar = capacitacionExistente.TiposDeInscripciones
+                                                .Where(t => !capacitacion.TiposDeInscripciones
+                                                .Any(ti => ti.Id == t.Id))
+                                                .ToList();
+            foreach (var tipoInscripcionCapacitacion in tipodeInscripcionesAEliminar)
             {
                 _context.TryAttach(tipoInscripcionCapacitacion.TipoInscripcion);
                 tipoInscripcionCapacitacion.Capacitacion = null;
                 _context.TiposInscripcionesCapacitaciones.Remove(tipoInscripcionCapacitacion);
             }
 
-            var tipoInscripcionAgregar = capacitacion.TiposDeInscripciones
-                                                            .Where(ti => !capacitacionExistente.TiposDeInscripciones
-                                                            .Any(t => t.Id == ti.Id))
-                                                            .ToList();
-            foreach (var tipoInscripcionCapacitacion in tipoInscripcionAgregar)
+            var tiposDeInscripcionesAAgregar = capacitacion.TiposDeInscripciones
+                                                .Where(ti => !capacitacionExistente.TiposDeInscripciones
+                                                .Any(t => t.Id == ti.Id))
+                                                .ToList();
+
+            foreach (var tipoInscripcionCapacitacion in tiposDeInscripcionesAAgregar)
             {
                 _context.TryAttach(tipoInscripcionCapacitacion.TipoInscripcion);
                 _context.TiposInscripcionesCapacitaciones.Add(tipoInscripcionCapacitacion);
             }
+            #endregion
+
+            #region Manejo de ICollection Inscripciones
+            // Attach las entidades Usuario y UsuarioCobro para que no intente guardarlas nuevamente
+            foreach (var inscripcion in capacitacion.Inscripciones)
+            {
+                inscripcion.Usuario = null;
+                inscripcion.UsuarioCobro = null;
+                inscripcion.Capacitacion = null;
+                inscripcion.TipoInscripcion = null; // Evitar duplicados
+            }
 
 
-                _context.Entry(capacitacion).State = EntityState.Modified;
-            //entry = le dice al contexto que la entidad capacitacion fue modificada 
-            //context tiene una copia gigante de copia de datos
+            var inscripcionesAEliminar = capacitacionExistente.Inscripciones
+                                                .Where(t => !capacitacion.Inscripciones
+                                                .Any(ti => ti.Id == t.Id))
+                                                .ToList();
+            foreach (var inscripcion1 in inscripcionesAEliminar)
+            {
+                inscripcion1.Usuario = null;
+                inscripcion1.UsuarioCobro = null;
+                inscripcion1.TipoInscripcion = null;
+                inscripcion1.Capacitacion = null;
+                _context.Inscripciones.Remove(inscripcion1);
+            }
+
+            var inscripcionesAAgregar = capacitacion.Inscripciones
+                                                .Where(ti => !capacitacionExistente.Inscripciones
+                                                .Any(t => t.Id == ti.Id))
+                                                .ToList();
+
+            foreach (var inscripcion2 in inscripcionesAAgregar)
+            {
+                inscripcion2.Usuario = null;
+                inscripcion2.UsuarioCobro = null;
+                inscripcion2.TipoInscripcion = null;
+                inscripcion2.Capacitacion = null;
+                _context.Inscripciones.Add(inscripcion2);
+            }
+            #endregion
+
+
 
             try
             {
@@ -159,10 +210,7 @@ namespace Backend.Controllers
             foreach (var tipoInscripcionCapacitacion in capacitacion.TiposDeInscripciones)
             {
                 _context.Attach(tipoInscripcionCapacitacion.TipoInscripcion);
-                //attach es para decir que no se cree un nuevo registro de TipoInscripcion porque ya existe
             }
-
-
             _context.Capacitaciones.Add(capacitacion);
             await _context.SaveChangesAsync();
 
@@ -189,7 +237,7 @@ namespace Backend.Controllers
         [HttpPut("restore/{id}")]
         public async Task<IActionResult> RestoreCapacitacion(int id)
         {
-            var capacitacion = await _context.Capacitaciones.IgnoreQueryFilters().FirstOrDefaultAsync(c=>c.Id.Equals(id));
+            var capacitacion = await _context.Capacitaciones.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.Id.Equals(id));
             if (capacitacion == null)
             {
                 return NotFound();

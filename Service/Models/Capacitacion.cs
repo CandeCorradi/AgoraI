@@ -17,7 +17,10 @@ namespace Service.Models
         public bool InscripcionAbierta { get; set; } = false;
         public bool IsDeleted { get; set; } = false;
 
-        public ICollection<TipoInscripcionCapacitacion> TiposDeInscripciones { get; set; } = new List<TipoInscripcionCapacitacion>();
+        public ICollection<TipoInscripcionCapacitacion> TiposDeInscripciones { get; set; } = new 
+            List<TipoInscripcionCapacitacion>();
+        public ICollection<Inscripcion> Inscripciones { get; set; } = new List<Inscripcion>();
+
 
         public override string ToString()
         {

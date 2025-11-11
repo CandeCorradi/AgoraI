@@ -28,8 +28,9 @@ namespace Desktop.Views
         }
         private async Task GetAllData()
         {
-            await GetComboCapacitaciones();
-            await GetGrillaUsuarios();
+            var GetComboTask = GetComboCapacitaciones();
+            var GetGrillaTask = GetGrillaUsuarios();
+            await Task.WhenAll(GetComboTask, GetGrillaTask);
         }
 
         private async Task GetGrillaUsuarios()
@@ -57,11 +58,36 @@ namespace Desktop.Views
             //controlamos que no sea null y haya una capacitacion seleccionada
             if (CmbCapacitacion.SelectedItem is Capacitacion selectedCapacitacion)
             {
-                _inscripciones = await _inscripcionService.GetInscriptosAsync(selectedCapacitacion.Id);
-                GridInscripciones.DataSource = _inscripciones;
-                GridInscripciones.HideColumns("Id", "CapacitacionId", "TipoInscripcionId", "Capacitacion", "UsuarioId", "UsuarioCobroId", "IsDeleted");
-                await GetGrillaUsuarios();
+                RefreshInscripciones(selectedCapacitacion);
+                GetComboTiposDeInscripciones(selectedCapacitacion);
+
             }
+        }
+
+        private void GetComboTiposDeInscripciones(Capacitacion selectedCapacitacion)
+        {
+            CmbTipoInscripcion.DataSource = selectedCapacitacion.TiposDeInscripciones.ToList();
+            CmbTipoInscripcion.DisplayMember = "TipoInscripcion"; //que campo de esa lista se usa para mostrar
+            CmbTipoInscripcion.ValueMember = "TipoInscripcionId"; //que campo de esa lista se usa como valor
+            CmbTipoInscripcion.SelectedIndex = -1;
+        }
+
+        private async void RefreshInscripciones(Capacitacion selectedCapacitacion)
+        {
+            _inscripciones = selectedCapacitacion.Inscripciones.ToList();
+            //_inscripciones = await _inscripcionService.GetInscriptosAsync(selectedCapacitacion.Id);
+            GridInscripciones.DataSource = _inscripciones;
+            //ocultamos las columnas Id, UsuarioId, TipoInscripcionId,CapacitacionId, Capacitacion
+            GridInscripciones.HideColumns("Id", "UsuarioId", "TipoInscripcionId", "CapacitacionId", "Capacitacion", "UsuarioCobroId", "IsDeleted", "UsuarioCobro", "Pagado");
+            if (GridInscripciones.Columns.Contains("Importe"))
+            {
+                GridInscripciones.Columns["Importe"].DefaultCellStyle.Format = "C2";
+                GridInscripciones.Columns["Importe"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            }
+
+
+            await GetGrillaUsuarios();
         }
 
         private void BtnBuscar_Click(object sender, EventArgs e)
@@ -85,6 +111,49 @@ namespace Desktop.Views
             {
                 BtnBuscar.PerformClick();
                 e.Handled = true; // Evita el sonido de "ding" al presionar Enter
+            }
+        }
+
+        private async void BtnAgregarUsuario_Click(object sender, EventArgs e)
+        {
+            //si no hay un usuario seleccionado advierte y sale
+            if (GridUsuarios.CurrentRow?.DataBoundItem is not Usuario selectedUsuario)
+            {
+                MessageBox.Show("Seleccione un usuario para inscribir.");
+                return;
+            }
+            //si no hay una capacitación seleccionada advierte y sale
+            if (CmbCapacitacion.SelectedItem is not Capacitacion selectedCapacitacion)
+            {
+                MessageBox.Show("Seleccione una capacitación para inscribir el usuario.");
+                return;
+            }
+            //si no hay un tipo de inscripción seleccionado advierte y sale
+            if (CmbTipoInscripcion.SelectedItem is not TipoInscripcionCapacitacion selectedTipoInscripcion)
+            {
+                MessageBox.Show("Seleccione un tipo de inscripción para el usuario.");
+                return;
+            }
+            var nuevaInscripcion = new Inscripcion
+            {
+                UsuarioId = selectedUsuario.Id,
+                Usuario = selectedUsuario,
+                Importe = selectedTipoInscripcion.Costo,
+                CapacitacionId = selectedCapacitacion.Id,
+                TipoInscripcionId = selectedTipoInscripcion.TipoInscripcionId,
+                TipoInscripcion = selectedTipoInscripcion.TipoInscripcion,
+                UsuarioCobroId = null // Asignar el ID del usuario que realiza el cobro si es necesario
+            };
+            selectedCapacitacion.Inscripciones.Add(nuevaInscripcion);
+            RefreshInscripciones(selectedCapacitacion);
+            try
+            {
+                await _capacitacionService.UpdateAsync(selectedCapacitacion);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al inscribir el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
         }
     }
